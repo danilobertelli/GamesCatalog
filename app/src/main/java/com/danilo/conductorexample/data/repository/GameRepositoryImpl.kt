@@ -1,5 +1,6 @@
 package com.danilo.conductorexample.data.repository
 
+import android.util.Log
 import com.danilo.conductorexample.data.local.dao.GameDao
 import com.danilo.conductorexample.data.local.entity.GameEntity
 import com.danilo.conductorexample.domain.model.Game
@@ -12,6 +13,15 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
+/**
+ * Concrete implementation of [GameRepository] leveraging Room's [GameDao].
+ *
+ * Dispatches database queries and mutations to an I/O optimized coroutine dispatcher,
+ * converting between persistent [GameEntity] records and [Game] domain models.
+ *
+ * @param gameDao Room DAO instance for game table operations.
+ * @param ioDispatcher Coroutine dispatcher for database I/O operations (defaults to [Dispatchers.IO]).
+ */
 class GameRepositoryImpl(
     private val gameDao: GameDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -36,11 +46,23 @@ class GameRepositoryImpl(
     }
 
     override suspend fun upsertGame(game: Game) = withContext(ioDispatcher) {
-        gameDao.upsertGame(game.toEntity())
+        Log.d(TAG, "Upserting game: id=${game.id}, title='${game.title}', status=${game.status}")
+        try {
+            gameDao.upsertGame(game.toEntity())
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to upsert game id=${game.id}", e)
+            throw e
+        }
     }
 
     override suspend fun deleteGame(id: String) = withContext(ioDispatcher) {
-        gameDao.deleteGameById(id)
+        Log.d(TAG, "Deleting game: id=$id")
+        try {
+            gameDao.deleteGameById(id)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to delete game id=$id", e)
+            throw e
+        }
     }
 
     private fun GameEntity.toDomain(): Game {
@@ -73,5 +95,9 @@ class GameRepositoryImpl(
             rating = rating,
             completionDateEpochMs = completionDateEpochMs
         )
+    }
+
+    companion object {
+        private const val TAG = "GameRepository"
     }
 }

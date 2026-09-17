@@ -13,6 +13,15 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel managing the details view, edit interactions, and deletion of a game.
+ *
+ * Extracts the `gameId` from navigation [SavedStateHandle] arguments, retrieves the game
+ * record from [GameRepository], coordinates rating and status edits, and executes deletions.
+ *
+ * @param savedStateHandle Navigation handle containing destination route arguments.
+ * @param gameRepository Repository for querying, modifying, or deleting game entities.
+ */
 class GameDetailViewModel(
     savedStateHandle: SavedStateHandle,
     private val gameRepository: GameRepository

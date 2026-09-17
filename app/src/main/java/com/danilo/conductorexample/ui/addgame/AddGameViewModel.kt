@@ -19,6 +19,19 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+/**
+ * ViewModel managing the input form and reactive logic for adding a new game.
+ *
+ * Responsibilities:
+ * - Pre-loads available platforms from [PlatformRepository] (seeding default values if needed).
+ * - Debounces user title keystrokes (400ms) to query the IGDB API via [IgdbRemoteDataSource].
+ * - Auto-populates title, overview, cover art, and matching platforms upon suggestion selection.
+ * - Validates input and persists new [Game] instances via [GameRepository].
+ *
+ * @param gameRepository Repository for inserting newly created games.
+ * @param platformRepository Repository providing the list of available platforms.
+ * @param igdbRemoteDataSource Remote data source for real-time IGDB game search.
+ */
 @OptIn(FlowPreview::class)
 class AddGameViewModel(
     private val gameRepository: GameRepository,

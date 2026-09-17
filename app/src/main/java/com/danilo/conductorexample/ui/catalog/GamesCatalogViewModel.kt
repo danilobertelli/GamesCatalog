@@ -9,6 +9,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
+/**
+ * ViewModel managing the state and business logic for the main Games Catalog screen.
+ *
+ * Combines the reactive game list stream from [GameRepository] with the current user
+ * search query to produce an immutable, filtered [GamesCatalogUiState].
+ *
+ * @param gameRepository Repository for querying user game entries.
+ */
 class GamesCatalogViewModel(
     private val gameRepository: GameRepository
 ) : ViewModel() {
