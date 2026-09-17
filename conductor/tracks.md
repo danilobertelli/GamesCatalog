@@ -23,3 +23,8 @@ This file tracks all major development tracks for the project. Each track has it
 - [x] **Track: IGDB API Integration with Retrofit, Twitch Auth, Coil Image Loading, and Remote Search**
   *Link: [./tracks/api_igdb_integration_20260917/](./tracks/api_igdb_integration_20260917/)*
 
+---
+
+- [ ] **Track: Documentation, Structured Logging, and Root README.md**
+  *Link: [./tracks/support_docs_logs_readme_20260917/](./tracks/support_docs_logs_readme_20260917/)*
+
