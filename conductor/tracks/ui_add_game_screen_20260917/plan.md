@@ -9,10 +9,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1 - Platforms Storage' (Protocol in workflow.md)
 
 ## Phase 2: Navigation Setup & Dependencies
-- [ ] Task: Add androidx-navigation-compose to libs.versions.toml and app/build.gradle.kts
-- [ ] Task: Define AppDestinations navigation routes
-- [ ] Task: Setup NavHost in MainActivity connecting GamesCatalogScreen
-- [ ] Task: Conductor - User Manual Verification 'Phase 2 - Navigation Setup' (Protocol in workflow.md)
+- [x] Task: Add androidx-navigation-compose to libs.versions.toml and app/build.gradle.kts
+- [x] Task: Define AppDestinations navigation routes
+- [x] Task: Setup NavHost in MainActivity connecting GamesCatalogScreen
+- [x] Task: Conductor - User Manual Verification 'Phase 2 - Navigation Setup' (Protocol in workflow.md)
 
 ## Phase 3: AddGameViewModel & State (TDD)
 - [ ] Task: Write failing unit tests in AddGameViewModelTest (loading platforms, validation, save) [RED]
