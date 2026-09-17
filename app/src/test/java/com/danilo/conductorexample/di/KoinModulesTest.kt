@@ -50,5 +50,8 @@ class KoinModulesTest : KoinTest {
 
         val viewModel = get<com.danilo.conductorexample.ui.catalog.GamesCatalogViewModel>()
         assertNotNull(viewModel)
+
+        val addGameViewModel = get<com.danilo.conductorexample.ui.addgame.AddGameViewModel>()
+        assertNotNull(addGameViewModel)
     }
 }

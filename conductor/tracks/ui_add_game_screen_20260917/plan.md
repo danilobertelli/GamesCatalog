@@ -15,10 +15,10 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2 - Navigation Setup' (Protocol in workflow.md)
 
 ## Phase 3: AddGameViewModel & State (TDD)
-- [ ] Task: Write failing unit tests in AddGameViewModelTest (loading platforms, validation, save) [RED]
-- [ ] Task: Implement AddGameUiState and AddGameViewModel [GREEN]
-- [ ] Task: Register AddGameViewModel into Koin appModule
-- [ ] Task: Conductor - User Manual Verification 'Phase 3 - ViewModel & State' (Protocol in workflow.md)
+- [x] Task: Write failing unit tests in AddGameViewModelTest (loading platforms, validation, save) [RED]
+- [x] Task: Implement AddGameUiState and AddGameViewModel [GREEN]
+- [x] Task: Register AddGameViewModel into Koin appModule
+- [x] Task: Conductor - User Manual Verification 'Phase 3 - ViewModel & State' (Protocol in workflow.md)
 
 ## Phase 4: Form UI Components & AddGameScreen (Compose)
 - [ ] Task: Extract all form strings, platform labels, and errors to res/values/strings.xml
