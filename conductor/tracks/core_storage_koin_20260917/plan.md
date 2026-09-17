@@ -9,12 +9,12 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Dependency Setup' (Protocol in workflow.md)
 
 ## Phase 2: Domain Layer Definition
-- [ ] Task: Create Domain Models and Enums
-    - [ ] Write unit test for `Game` and `GameStatus` validation rules
-    - [ ] Implement `GameStatus` enum (`WANT_TO_PLAY`, `PLAYING`, `COMPLETED`, `ABANDONED`)
-    - [ ] Implement `Game` immutable data class
-    - [ ] Define `GameRepository` domain interface
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Domain Layer Definition' (Protocol in workflow.md)
+- [x] Task: Create Domain Models and Enums
+    - [x] Write unit test for `Game` and `GameStatus` validation rules
+    - [x] Implement `GameStatus` enum (`WANT_TO_PLAY`, `PLAYING`, `COMPLETED`, `ABANDONED`)
+    - [x] Implement `Game` immutable data class
+    - [x] Define `GameRepository` domain interface
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Domain Layer Definition' (Protocol in workflow.md)
 
 ## Phase 3: Room Persistence Layer (TDD)
 - [ ] Task: Create Room Entity, Type Converters, and DAO
