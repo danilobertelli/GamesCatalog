@@ -17,17 +17,17 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Domain Layer Definition' (Protocol in workflow.md)
 
 ## Phase 3: Room Persistence Layer (TDD)
-- [ ] Task: Create Room Entity, Type Converters, and DAO
-    - [ ] Write failing unit test for `GameDao` using in-memory Room database
-    - [ ] Implement `GameEntity` and converters for platforms and status
-    - [ ] Implement `GameDao` with suspended CRUD and Flow queries
-    - [ ] Create `GamesCatalogDatabase` class
-    - [ ] Run test and verify all DAO tests pass (Green phase)
-- [ ] Task: Implement GameRepository with Domain Mapping (TDD)
-    - [ ] Write failing unit test for `GameRepositoryImpl`
-    - [ ] Implement `GameRepositoryImpl` mapping entities to domain models
-    - [ ] Run test and verify repository tests pass (Green phase)
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Room Persistence Layer' (Protocol in workflow.md)
+- [x] Task: Create Room Entity, Type Converters, and DAO
+    - [x] Write failing unit test for `GameDao` using in-memory Room database
+    - [x] Implement `GameEntity` and converters for platforms and status
+    - [x] Implement `GameDao` with suspended CRUD and Flow queries
+    - [x] Create `GamesCatalogDatabase` class
+    - [x] Run test and verify all DAO tests pass (Green phase)
+- [x] Task: Implement GameRepository with Domain Mapping (TDD)
+    - [x] Write failing unit test for `GameRepositoryImpl`
+    - [x] Implement `GameRepositoryImpl` mapping entities to domain models
+    - [x] Run test and verify repository tests pass (Green phase)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Room Persistence Layer' (Protocol in workflow.md)
 
 ## Phase 4: Koin Dependency Injection & Application Wiring
 - [ ] Task: Configure Koin Modules and Application Class
