@@ -33,6 +33,10 @@ import com.danilo.conductorexample.R
 import com.danilo.conductorexample.domain.model.Game
 import com.danilo.conductorexample.domain.model.GameStatus
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
+
 @Composable
 fun GameListItem(
     game: Game,
@@ -53,7 +57,7 @@ fun GameListItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Cover placeholder Box
+            // Cover Box (AsyncImage with initials fallback)
             Box(
                 modifier = Modifier
                     .size(width = 60.dp, height = 76.dp)
@@ -61,12 +65,21 @@ fun GameListItem(
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = game.title.take(2).uppercase(),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                if (!game.coverImageUrl.isNullOrBlank()) {
+                    AsyncImage(
+                        model = game.coverImageUrl,
+                        contentDescription = game.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Text(
+                        text = game.title.take(2).uppercase(),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(16.dp))

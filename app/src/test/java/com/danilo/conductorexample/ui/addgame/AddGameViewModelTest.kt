@@ -1,15 +1,19 @@
 package com.danilo.conductorexample.ui.addgame
 
 import app.cash.turbine.test
+import com.danilo.conductorexample.data.remote.datasource.IgdbRemoteDataSource
 import com.danilo.conductorexample.domain.model.Game
+import com.danilo.conductorexample.domain.model.GameSearchResult
 import com.danilo.conductorexample.domain.model.GameStatus
 import com.danilo.conductorexample.domain.model.Platform
 import com.danilo.conductorexample.domain.repository.GameRepository
 import com.danilo.conductorexample.domain.repository.PlatformRepository
 import com.danilo.conductorexample.util.MainDispatcherRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -19,6 +23,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AddGameViewModelTest {
 
     @get:Rule
@@ -26,11 +31,13 @@ class AddGameViewModelTest {
 
     private val fakeGameRepository = FakeGameRepository()
     private val fakePlatformRepository = FakePlatformRepository()
+    private val fakeIgdbDataSource = FakeIgdbRemoteDataSource()
 
     private fun createViewModel(): AddGameViewModel {
         return AddGameViewModel(
             gameRepository = fakeGameRepository,
-            platformRepository = fakePlatformRepository
+            platformRepository = fakePlatformRepository,
+            igdbRemoteDataSource = fakeIgdbDataSource
         )
     }
 
@@ -63,6 +70,68 @@ class AddGameViewModelTest {
 
         assertEquals("Dark Souls", viewModel.uiState.value.title)
         assertNull(viewModel.uiState.value.titleError)
+    }
+
+    @Test
+    fun `title change triggers debounced remote search and populates suggestions`() = runTest {
+        fakeIgdbDataSource.stubbedResults = listOf(
+            GameSearchResult(
+                id = "100",
+                title = "Dark Souls Remastered",
+                overview = "Prepare to die again.",
+                coverImageUrl = "https://images.igdb.com/cover1.jpg",
+                platformNames = listOf("PlayStation 4", "PC")
+            )
+        )
+
+        val viewModel = createViewModel()
+        viewModel.onTitleChanged("Dark")
+
+        advanceTimeBy(500) // Advance past 400ms debounce
+
+        val state = viewModel.uiState.value
+        assertEquals("Dark", fakeIgdbDataSource.lastSearchQuery)
+        assertEquals(1, state.igdbSuggestions.size)
+        assertEquals("Dark Souls Remastered", state.igdbSuggestions.first().title)
+        assertTrue(state.showSuggestions)
+        assertFalse(state.isSearchingIgdb)
+    }
+
+    @Test
+    fun `selecting suggestion autofills title overview cover and matches platforms`() = runTest {
+        fakePlatformRepository.emitPlatforms(
+            listOf(
+                Platform("ps4", "PlayStation 4"),
+                Platform("switch", "Nintendo Switch")
+            )
+        )
+        val viewModel = createViewModel()
+
+        val suggestion = GameSearchResult(
+            id = "100",
+            title = "Dark Souls Remastered",
+            overview = "Prepare to die again.",
+            coverImageUrl = "https://images.igdb.com/cover1.jpg",
+            platformNames = listOf("PlayStation 4", "Xbox One")
+        )
+
+        viewModel.onSuggestionSelected(suggestion)
+
+        val state = viewModel.uiState.value
+        assertEquals("Dark Souls Remastered", state.title)
+        assertEquals("Prepare to die again.", state.overview)
+        assertEquals("https://images.igdb.com/cover1.jpg", state.coverImageUrl)
+        assertTrue(state.selectedPlatforms.contains("PlayStation 4"))
+        assertFalse(state.selectedPlatforms.contains("Nintendo Switch"))
+        assertFalse(state.showSuggestions)
+        assertTrue(state.igdbSuggestions.isEmpty())
+    }
+
+    @Test
+    fun `dismissing suggestions clears showSuggestions flag`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.onDismissSuggestions()
+        assertFalse(viewModel.uiState.value.showSuggestions)
     }
 
     @Test
@@ -167,5 +236,15 @@ private class FakeGameRepository : GameRepository {
 
     override suspend fun deleteGame(id: String) {
         savedGames.removeAll { it.id == id }
+    }
+}
+
+private class FakeIgdbRemoteDataSource : IgdbRemoteDataSource {
+    var lastSearchQuery: String? = null
+    var stubbedResults: List<GameSearchResult> = emptyList()
+
+    override suspend fun searchGames(query: String, limit: Int): Result<List<GameSearchResult>> {
+        lastSearchQuery = query
+        return Result.success(stubbedResults)
     }
 }

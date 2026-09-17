@@ -189,6 +189,26 @@ Essa instrução resume o equilíbrio perfeito de um fluxo de desenvolvimento mo
 
 ---
 
+### 5. Da Documentação à Realidade: Integrando a API da IGDB (Track 5)
+
+Uma das maiores armadilhas no desenvolvimento com IA é presumir contratos de API antes de consultar a documentação oficial. Na Track 5, estabelecemos uma regra clara antes de escrever qualquer linha de código:
+> *"Antes de começar, analise a documentação e APIs disponíveis em https://api-docs.igdb.com e verifique as que podemos usar na aplicação."*
+
+#### 1. Pesquisa Técnica Aprofundada & Decisões Arquiteturais
+- **Investigação da API IGDB:** Mapeamos a sintaxe de consulta Apicalypse (`fields name, summary, cover.image_id; search "..."; limit 8;`), o sistema de URLs das imagens (`https://images.igdb.com/igdb/image/upload/t_{size}/{hash}.jpg`) e a autenticação obrigatória via Twitch OAuth2 (`client_credentials`).
+- **Alinhamento Tecnológico:** Entre Retrofit e Ktor, optamos por **Retrofit 2.11**, tirando proveito da nossa familiaridade com a biblioteca e integrando com o moderno `kotlinx.serialization` oficial da Jetpack/Kotlin.
+- **Segurança de Credenciais:** As chaves de API nunca vão para o Git. Configuramos o `app/build.gradle.kts` para ler `igdb.clientId` e `igdb.clientSecret` diretamente do `local.properties` do desenvolvedor, expondo-as de forma segura via `BuildConfig`.
+
+#### 2. Engenharia em Camadas: Do Token Manager à UI com Coil
+- **`TwitchTokenManager`:** Implementado com controle rigoroso de expiração e margem de segurança de 60 segundos, protegido por `Mutex` para evitar concorrência e requisições duplicadas.
+- **`IgdbAuthInterceptor`:** Interceptor OkHttp transparente que anexa os headers `Client-ID` e `Authorization: Bearer <token>` em todas as chamadas para a IGDB.
+- **`IgdbRemoteDataSource`:** Converte termos de busca em sintaxe Apicalypse pura, higieniza aspas e resolve as imagens de capa no tamanho `cover_big`.
+- **Autocomplete em Tempo Real:** No `AddGameViewModel`, implementamos um fluxo reativo com `debounce(400)` e `distinctUntilChanged()`. Ao digitar o título de um jogo (ex: *"Zelda"*, *"Witcher"*), um card com sugestões da IGDB aparece instantaneamente.
+- **Autopreenchimento Inteligente:** Ao tocar em uma sugestão, o título, a sinopse/notas e a capa são preenchidos automaticamente, e as plataformas do jogo são cruzadas e pré-selecionadas com os chips locais do Room.
+- **Coil `AsyncImage`:** Capas renderizadas tanto no catálogo principal quanto na tela de detalhes, com fallback elegante para as iniciais estilizadas em caso de jogos sem capa ou offline.
+
+---
+
 ### Parte 6: Principais Lições Aprendidas (Key Takeaways)
 1. **A IA como Pair Programmer Ativo (não gerador passivo):** A discussão em conjunto sobre arquitetura e trade-offs eleva o nível técnico da entrega.
 2. **A Verdade dos Testes:** O TDD protege contra alucinações. Se o teste não falhou antes, a IA não provou que o código fez diferença.
@@ -200,7 +220,7 @@ Essa instrução resume o equilíbrio perfeito de um fluxo de desenvolvimento mo
 
 ### Conclusão & Próximos Passos
 - O Conductor transforma o desenvolvimento assistido por IA de um "experimento arriscado" em uma engenharia de software previsível, auditável e escalável.
-- Próximas tracks planejadas: Consumo da API IGDB / Ktor (Offline-First) e sincronização de dados.
+- O catálogo agora é uma experiência rica, conectando persistência local offline-first com o vasto ecossistema de metadados e capas da indústria gamer via IGDB.
 
 ---
 

@@ -2,6 +2,7 @@ package com.danilo.conductorexample.ui.addgame
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +11,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,15 +30,21 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.danilo.conductorexample.R
+import com.danilo.conductorexample.domain.model.GameSearchResult
 import com.danilo.conductorexample.domain.model.GameStatus
 import com.danilo.conductorexample.domain.model.Platform
+import com.danilo.conductorexample.ui.addgame.components.IgdbSuggestionsCard
 import com.danilo.conductorexample.ui.addgame.components.PlatformChipGroup
 import com.danilo.conductorexample.ui.addgame.components.StarRatingPicker
 import com.danilo.conductorexample.ui.addgame.components.StatusChipGroup
@@ -64,6 +74,8 @@ fun AddGameScreen(
     AddGameContent(
         uiState = uiState,
         onTitleChanged = viewModel::onTitleChanged,
+        onSuggestionSelected = viewModel::onSuggestionSelected,
+        onDismissSuggestions = viewModel::onDismissSuggestions,
         onStatusSelected = viewModel::onStatusChanged,
         onRatingChanged = viewModel::onRatingChanged,
         onPlatformToggled = viewModel::onPlatformToggled,
@@ -79,6 +91,8 @@ fun AddGameScreen(
 fun AddGameContent(
     uiState: AddGameUiState,
     onTitleChanged: (String) -> Unit,
+    onSuggestionSelected: (GameSearchResult) -> Unit,
+    onDismissSuggestions: () -> Unit,
     onStatusSelected: (GameStatus) -> Unit,
     onRatingChanged: (Int?) -> Unit,
     onPlatformToggled: (String) -> Unit,
@@ -137,24 +151,61 @@ fun AddGameContent(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
+            // Selected Cover Preview (if any)
+            if (!uiState.coverImageUrl.isNullOrBlank()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(160.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        model = uiState.coverImageUrl,
+                        contentDescription = uiState.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+
             // Title Field
-            OutlinedTextField(
-                value = uiState.title,
-                onValueChange = onTitleChanged,
-                label = { Text(text = stringResource(R.string.add_game_field_title_label)) },
-                placeholder = { Text(text = stringResource(R.string.add_game_field_title_placeholder)) },
-                isError = uiState.titleError != null,
-                supportingText = uiState.titleError?.let {
-                    {
-                        Text(
-                            text = stringResource(R.string.add_game_field_title_error),
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = uiState.title,
+                    onValueChange = onTitleChanged,
+                    label = { Text(text = stringResource(R.string.add_game_field_title_label)) },
+                    placeholder = { Text(text = stringResource(R.string.add_game_field_title_placeholder)) },
+                    trailingIcon = {
+                        if (uiState.isSearchingIgdb) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                    },
+                    isError = uiState.titleError != null,
+                    supportingText = uiState.titleError?.let {
+                        {
+                            Text(
+                                text = stringResource(R.string.add_game_field_title_error),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                // IGDB Autocomplete Suggestions
+                if (uiState.showSuggestions && uiState.igdbSuggestions.isNotEmpty()) {
+                    IgdbSuggestionsCard(
+                        suggestions = uiState.igdbSuggestions,
+                        onSuggestionSelected = onSuggestionSelected,
+                        onDismiss = onDismissSuggestions
+                    )
+                }
+            }
 
             // Status Chip Group
             StatusChipGroup(
@@ -208,6 +259,8 @@ private fun AddGameContentPreview() {
                 overview = "Incredible open world."
             ),
             onTitleChanged = {},
+            onSuggestionSelected = {},
+            onDismissSuggestions = {},
             onStatusSelected = {},
             onRatingChanged = {},
             onPlatformToggled = {},

@@ -18,3 +18,8 @@ This file tracks all major development tracks for the project. Each track has it
 - [x] **Track: Game Detail & Edit Screen with Delete Confirmation Dialog and Navigation**
   *Link: [./tracks/ui_game_detail_screen_20260917/](./tracks/ui_game_detail_screen_20260917/)*
 
+---
+
+- [x] **Track: IGDB API Integration with Retrofit, Twitch Auth, Coil Image Loading, and Remote Search**
+  *Link: [./tracks/api_igdb_integration_20260917/](./tracks/api_igdb_integration_20260917/)*
+

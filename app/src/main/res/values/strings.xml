@@ -68,4 +68,11 @@
     <string name="game_detail_delete_dialog_message">Are you sure you want to delete \"%1$s\" from your catalog? This action cannot be undone.</string>
     <string name="game_detail_delete_dialog_confirm">Delete</string>
     <string name="game_detail_delete_dialog_cancel">Cancel</string>
+
+    <!-- IGDB Search & Autocomplete -->
+    <string name="add_game_search_igdb_searching">Searching IGDB…</string>
+    <string name="add_game_search_igdb_results_header">Suggestions from IGDB</string>
+    <string name="add_game_search_igdb_no_results">No suggestions found on IGDB</string>
+    <string name="add_game_search_igdb_release_year">(%1$d)</string>
+    <string name="add_game_search_igdb_dismiss">Dismiss</string>
 </resources>

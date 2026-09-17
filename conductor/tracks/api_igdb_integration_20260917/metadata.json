@@ -1,0 +1,8 @@
+{
+  "track_id": "api_igdb_integration_20260917",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-09-17T15:37:00Z",
+  "updated_at": "2026-09-17T15:37:00Z",
+  "description": "Integration with IGDB API v4 using Retrofit, Twitch OAuth2, kotlinx.serialization, Coil image loading, and remote search in AddGameScreen"
+}

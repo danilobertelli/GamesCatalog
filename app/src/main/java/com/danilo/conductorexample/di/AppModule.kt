@@ -51,4 +51,4 @@ val viewModelModule = module {
     viewModelOf(::GameDetailViewModel)
 }
 
-val appModules = listOf(databaseModule, repositoryModule, viewModelModule)
+val appModules = listOf(databaseModule, repositoryModule, networkModule, viewModelModule)

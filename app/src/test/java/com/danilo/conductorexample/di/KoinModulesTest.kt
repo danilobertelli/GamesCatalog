@@ -58,5 +58,17 @@ class KoinModulesTest : KoinTest {
             org.koin.core.parameter.parametersOf(androidx.lifecycle.SavedStateHandle())
         }
         assertNotNull(gameDetailViewModel)
+
+        val twitchAuthService = get<com.danilo.conductorexample.data.remote.api.TwitchAuthService>()
+        assertNotNull(twitchAuthService)
+
+        val twitchTokenManager = get<com.danilo.conductorexample.data.remote.auth.TwitchTokenManager>()
+        assertNotNull(twitchTokenManager)
+
+        val igdbApiService = get<com.danilo.conductorexample.data.remote.api.IgdbApiService>()
+        assertNotNull(igdbApiService)
+
+        val igdbRemoteDataSource = get<com.danilo.conductorexample.data.remote.datasource.IgdbRemoteDataSource>()
+        assertNotNull(igdbRemoteDataSource)
     }
 }
