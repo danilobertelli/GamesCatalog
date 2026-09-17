@@ -169,15 +169,23 @@ Na Track 4 (`ui_game_detail_screen_20260917`), fechamos o ciclo de gerenciamento
 
 #### 1. Requisitos Clássicos de Negócio & Decisões de Design
 Ao definir a track, alinhamos regras estritas de edição:
-- **Título e Plataformas são Imutáveis (Read-Only):** Exibidos em cards com destaque e chips informativos, garantindo consistência histórica.
+- **Título e Plataformas são Imutáveis (Read-Only):** Exibidos em cards com destaque e chips informativos, garantindo consistência histórica e prevenindo inconsistências acidentais.
 - **Campos Editáveis:** Status de progresso (`Want to Play`, `Playing`, `Completed`, `Abandoned`), avaliação em estrelas (1-5) e anotações/resenha do jogador.
 - **Ação Explícita de Salvar:** Botão fixo no rodapé com elevação tonal e insets de navegação, persistindo via `GameRepository.upsertGame` e retornando com feedback visual.
-- **Ação Crítica de Exclusão:** Ícone de lixeira na TopAppBar acionando um `AlertDialog` de confirmação ("Tem certeza que deseja excluir? Esta ação não pode ser desfeita").
+- **Ação Crítica de Exclusão:** Ícone de lixeira na TopAppBar acionando um `AlertDialog` de confirmação (*"Tem certeza que deseja excluir? Esta ação não pode ser desfeita"*).
 
 #### 2. TDD & Arquitetura Robusta
 - Red Phase em `GameDetailViewModelTest.kt` cobrindo carregamento por ID via `SavedStateHandle`, tratamento de jogo inexistente (`isGameNotFound`), modificação de campos, persistência e exclusão.
 - Reuso de componentes atômicos construídos nas tracks anteriores (`StatusChipGroup`, `StarRatingPicker`), acelerando a montagem da tela com 100% das strings em `strings.xml`.
-- Compilação limpa e instalação automatizada no dispositivo físico (`./gradlew installDebug`), entregando o app pronto para os meus testes manuais no hardware.
+
+#### 3. O Ponto de Equilíbrio: Onde Termina o Trabalho da IA e Começa a Validação Humana
+Durante a revisão do plano de implementação desta track, fiz uma intervenção cirúrgica nos critérios de validação:
+> *"Manual verification pode deixar com o desenvolvedor, garanta apenas a instalação no final do processo."*
+
+Essa instrução resume o equilíbrio perfeito de um fluxo de desenvolvimento moderno com IA:
+- **A Responsabilidade da IA:** Garantir a blindagem do código, a cobertura com testes unitários automatizados (`./gradlew testDebugUnitTest`), a compilação do APK (`assembleDebug`) e a instalação direta no aparelho plugado via `./gradlew installDebug`.
+- **A Responsabilidade do Desenvolvedor:** Pegar o aparelho na mão, navegar pelas telas, validar a ergonomia dos botões, sentir a fluidez da digitação e a resposta dos toques reais.
+- **O Veredito Final:** Somente após a minha validação física direta (*"Já realizei o teste e está ok, podemos prosseguir"*) o agente recebeu sinal verde para executar o commit e o push para o GitHub.
 
 ---
 
