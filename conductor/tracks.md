@@ -4,4 +4,5 @@ This file tracks all major development tracks for the project. Each track has it
 
 ---
 
-*(No active tracks yet. Ready to initialize via `/conductor:newTrack` or setup protocol).*
+- [ ] **Track: Setup Room Local Storage, Domain Models, Repository, and Koin DI**
+  *Link: [./tracks/core_storage_koin_20260917/](./tracks/core_storage_koin_20260917/)*
