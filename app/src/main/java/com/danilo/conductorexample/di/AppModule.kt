@@ -10,6 +10,7 @@ import com.danilo.conductorexample.domain.repository.GameRepository
 import com.danilo.conductorexample.domain.repository.PlatformRepository
 import com.danilo.conductorexample.ui.addgame.AddGameViewModel
 import com.danilo.conductorexample.ui.catalog.GamesCatalogViewModel
+import com.danilo.conductorexample.ui.detail.GameDetailViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -47,6 +48,7 @@ val repositoryModule = module {
 val viewModelModule = module {
     viewModelOf(::GamesCatalogViewModel)
     viewModelOf(::AddGameViewModel)
+    viewModelOf(::GameDetailViewModel)
 }
 
 val appModules = listOf(databaseModule, repositoryModule, viewModelModule)

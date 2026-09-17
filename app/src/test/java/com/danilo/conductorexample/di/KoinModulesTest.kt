@@ -53,5 +53,10 @@ class KoinModulesTest : KoinTest {
 
         val addGameViewModel = get<com.danilo.conductorexample.ui.addgame.AddGameViewModel>()
         assertNotNull(addGameViewModel)
+
+        val gameDetailViewModel = get<com.danilo.conductorexample.ui.detail.GameDetailViewModel> {
+            org.koin.core.parameter.parametersOf(androidx.lifecycle.SavedStateHandle())
+        }
+        assertNotNull(gameDetailViewModel)
     }
 }

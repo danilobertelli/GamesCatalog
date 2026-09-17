@@ -39,6 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 fun GamesCatalogScreen(
     onAddGameClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onGameClick: (String) -> Unit = {},
     viewModel: GamesCatalogViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,6 +48,7 @@ fun GamesCatalogScreen(
         uiState = uiState,
         onSearchQueryChange = viewModel::onSearchQueryChanged,
         onAddGameClick = onAddGameClick,
+        onGameClick = { game -> onGameClick(game.id) },
         modifier = modifier
     )
 }

@@ -50,4 +50,22 @@
     <!-- Overview Group -->
     <string name="add_game_section_overview">Notes &amp; Overview</string>
     <string name="add_game_field_overview_placeholder">Add your notes, impressions, or summary (optional)</string>
+
+    <!-- Game Detail Screen -->
+    <string name="game_detail_screen_title">Game Details</string>
+    <string name="game_detail_back_description">Back to catalog</string>
+    <string name="game_detail_delete_description">Delete game</string>
+    <string name="game_detail_section_title">Title</string>
+    <string name="game_detail_section_platforms">Platforms</string>
+    <string name="game_detail_no_platforms">No platforms specified</string>
+    <string name="game_detail_save_button">Save Changes</string>
+    <string name="game_detail_saved_success">Game updated successfully!</string>
+    <string name="game_detail_deleted_success">Game deleted from catalog</string>
+    <string name="game_detail_not_found">Game not found</string>
+
+    <!-- Delete Confirmation Dialog -->
+    <string name="game_detail_delete_dialog_title">Delete Game?</string>
+    <string name="game_detail_delete_dialog_message">Are you sure you want to delete \"%1$s\" from your catalog? This action cannot be undone.</string>
+    <string name="game_detail_delete_dialog_confirm">Delete</string>
+    <string name="game_detail_delete_dialog_cancel">Cancel</string>
 </resources>

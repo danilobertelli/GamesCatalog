@@ -163,7 +163,25 @@ Antes de desenhar qualquer tela ou formulário, notei um risco clássico de mode
 
 ---
 
-### Parte 5: Principais Lições Aprendidas (Key Takeaways)
+### Parte 5: Hands-On — Track 4 (Visualização, Edição & Exclusão de Jogo com Confirmação)
+
+Na Track 4 (`ui_game_detail_screen_20260917`), fechamos o ciclo de gerenciamento de dados local implementando a tela de visualização e edição detalhada de um jogo cadastrado.
+
+#### 1. Requisitos Clássicos de Negócio & Decisões de Design
+Ao definir a track, alinhamos regras estritas de edição:
+- **Título e Plataformas são Imutáveis (Read-Only):** Exibidos em cards com destaque e chips informativos, garantindo consistência histórica.
+- **Campos Editáveis:** Status de progresso (`Want to Play`, `Playing`, `Completed`, `Abandoned`), avaliação em estrelas (1-5) e anotações/resenha do jogador.
+- **Ação Explícita de Salvar:** Botão fixo no rodapé com elevação tonal e insets de navegação, persistindo via `GameRepository.upsertGame` e retornando com feedback visual.
+- **Ação Crítica de Exclusão:** Ícone de lixeira na TopAppBar acionando um `AlertDialog` de confirmação ("Tem certeza que deseja excluir? Esta ação não pode ser desfeita").
+
+#### 2. TDD & Arquitetura Robusta
+- Red Phase em `GameDetailViewModelTest.kt` cobrindo carregamento por ID via `SavedStateHandle`, tratamento de jogo inexistente (`isGameNotFound`), modificação de campos, persistência e exclusão.
+- Reuso de componentes atômicos construídos nas tracks anteriores (`StatusChipGroup`, `StarRatingPicker`), acelerando a montagem da tela com 100% das strings em `strings.xml`.
+- Compilação limpa e instalação automatizada no dispositivo físico (`./gradlew installDebug`), entregando o app pronto para os meus testes manuais no hardware.
+
+---
+
+### Parte 6: Principais Lições Aprendidas (Key Takeaways)
 1. **A IA como Pair Programmer Ativo (não gerador passivo):** A discussão em conjunto sobre arquitetura e trade-offs eleva o nível técnico da entrega.
 2. **A Verdade dos Testes:** O TDD protege contra alucinações. Se o teste não falhou antes, a IA não provou que o código fez diferença.
 3. **Hardware Real Importa:** Nenhuma prévia de layout substitui a execução no aparelho físico com insets, temas e densidades de tela reais.
