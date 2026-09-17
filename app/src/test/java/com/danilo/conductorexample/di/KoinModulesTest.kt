@@ -41,5 +41,8 @@ class KoinModulesTest : KoinTest {
 
         val repository = get<GameRepository>()
         assertNotNull(repository)
+
+        val viewModel = get<com.danilo.conductorexample.ui.catalog.GamesCatalogViewModel>()
+        assertNotNull(viewModel)
     }
 }
