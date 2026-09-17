@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">ConductorExample</string>
+
+    <!-- Games Catalog Screen -->
+    <string name="catalog_screen_title">My Games</string>
+    <string name="catalog_search_placeholder">Search games…</string>
+    <string name="catalog_search_icon_description">Search icon</string>
+    <string name="catalog_clear_search_description">Clear search</string>
+    <string name="catalog_add_game_description">Add new game</string>
+    <string name="catalog_rating_description">Rating</string>
+    <string name="catalog_rating_format">%1$d/5</string>
+    <string name="catalog_rating_unrated">-/5</string>
+
+    <!-- Empty States -->
+    <string name="catalog_empty_title">Your catalog is empty</string>
+    <string name="catalog_empty_subtitle">Tap the \'+\' button to start building your personal game library!</string>
+    <string name="catalog_search_empty_title">No games found</string>
+    <string name="catalog_search_empty_subtitle">No games match \"%1$s\". Try a different search.</string>
+
+    <!-- Messages -->
+    <string name="catalog_add_game_coming_soon">Add Game feature coming soon!</string>
 </resources>

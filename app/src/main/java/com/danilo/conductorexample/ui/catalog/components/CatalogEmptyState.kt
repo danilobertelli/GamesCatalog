@@ -16,10 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.danilo.conductorexample.R
 
 @Composable
 fun CatalogEmptyState(
@@ -44,7 +46,11 @@ fun CatalogEmptyState(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = if (isSearchEmpty) "No games found" else "Your catalog is empty",
+            text = if (isSearchEmpty) {
+                stringResource(R.string.catalog_search_empty_title)
+            } else {
+                stringResource(R.string.catalog_empty_title)
+            },
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -54,9 +60,9 @@ fun CatalogEmptyState(
 
         Text(
             text = if (isSearchEmpty) {
-                "No games match \"$searchQuery\". Try a different search."
+                stringResource(R.string.catalog_search_empty_subtitle, searchQuery)
             } else {
-                "Tap the '+' button to start building your personal game library!"
+                stringResource(R.string.catalog_empty_subtitle)
             },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

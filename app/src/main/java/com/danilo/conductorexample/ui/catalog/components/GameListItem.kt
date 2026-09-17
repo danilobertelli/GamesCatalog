@@ -24,10 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.danilo.conductorexample.R
 import com.danilo.conductorexample.domain.model.Game
 import com.danilo.conductorexample.domain.model.GameStatus
 
@@ -88,13 +90,15 @@ fun GameListItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = "Rating",
+                        contentDescription = stringResource(R.string.catalog_rating_description),
                         tint = Color(0xFFFFB800),
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = game.rating?.let { "$it/5" } ?: "-/5",
+                        text = game.rating?.let {
+                            stringResource(R.string.catalog_rating_format, it)
+                        } ?: stringResource(R.string.catalog_rating_unrated),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

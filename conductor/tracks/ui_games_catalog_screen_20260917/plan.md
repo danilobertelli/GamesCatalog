@@ -19,15 +19,15 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: UI Components & Design System' (Protocol in workflow.md)
 
 ## Phase 3: Screen Assembly & Scaffold Integration
-- [ ] Task: Assemble GamesCatalogScreen
-    - [ ] Create `GamesCatalogScreen` integrating Scaffold, TopBar/SearchBar, LazyColumn, and FAB
-    - [ ] Wire `onAddGameClick` callback
-    - [ ] Add Compose `@Preview` configurations (populated catalog, search filtering, empty states)
-    - [ ] Connect `GamesCatalogScreen` in `MainActivity.kt`
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Screen Assembly & Scaffold Integration' (Protocol in workflow.md)
+- [x] Task: Assemble GamesCatalogScreen
+    - [x] Create `GamesCatalogScreen` integrating Scaffold, TopBar/SearchBar, LazyColumn, and FAB
+    - [x] Wire `onAddGameClick` callback
+    - [x] Add Compose `@Preview` configurations (populated catalog, search filtering, empty states)
+    - [x] Connect `GamesCatalogScreen` in `MainActivity.kt`
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Screen Assembly & Scaffold Integration' (Protocol in workflow.md)
 
 ## Phase 4: Verification & Track Checkpoint
-- [ ] Task: Automated Project Verification
-    - [ ] Run `./gradlew testDebugUnitTest` ensuring 100% pass rate
-    - [ ] Run `./gradlew assembleDebug` to verify complete UI compilation
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Verification & Track Checkpoint' (Protocol in workflow.md)
+- [x] Task: Automated Project Verification
+    - [x] Run `./gradlew testDebugUnitTest` ensuring 100% pass rate
+    - [x] Run `./gradlew assembleDebug` to verify complete UI compilation
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Verification & Track Checkpoint' (Protocol in workflow.md)

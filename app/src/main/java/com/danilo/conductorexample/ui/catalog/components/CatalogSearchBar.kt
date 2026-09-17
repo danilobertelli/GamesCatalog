@@ -11,8 +11,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.danilo.conductorexample.R
 
 @Composable
 fun CatalogSearchBar(
@@ -24,11 +26,11 @@ fun CatalogSearchBar(
         value = query,
         onValueChange = onQueryChange,
         modifier = modifier.fillMaxWidth(),
-        placeholder = { Text("Search games...") },
+        placeholder = { Text(stringResource(R.string.catalog_search_placeholder)) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = "Search icon"
+                contentDescription = stringResource(R.string.catalog_search_icon_description)
             )
         },
         trailingIcon = {
@@ -36,7 +38,7 @@ fun CatalogSearchBar(
                 IconButton(onClick = { onQueryChange("") }) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Clear search"
+                        contentDescription = stringResource(R.string.catalog_clear_search_description)
                     )
                 }
             }
