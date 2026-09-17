@@ -39,8 +39,14 @@ class KoinModulesTest : KoinTest {
         val dao = get<GameDao>()
         assertNotNull(dao)
 
+        val platformDao = get<com.danilo.conductorexample.data.local.dao.PlatformDao>()
+        assertNotNull(platformDao)
+
         val repository = get<GameRepository>()
         assertNotNull(repository)
+
+        val platformRepository = get<com.danilo.conductorexample.domain.repository.PlatformRepository>()
+        assertNotNull(platformRepository)
 
         val viewModel = get<com.danilo.conductorexample.ui.catalog.GamesCatalogViewModel>()
         assertNotNull(viewModel)

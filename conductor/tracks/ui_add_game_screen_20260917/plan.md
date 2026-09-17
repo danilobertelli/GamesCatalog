@@ -1,12 +1,12 @@
 # Implementation Plan: Pre-populated Platforms & Add Game Screen
 
 ## Phase 1: Platform Domain, Storage & Pre-population (Room & TDD)
-- [ ] Task: Create Platform domain model and PlatformEntity in Room
-- [ ] Task: Create PlatformDao and pre-seed list of gaming platforms
-- [ ] Task: Update GamesCatalogDatabase (version 2) with Room pre-population callback
-- [ ] Task: Write failing unit tests in PlatformDaoTest and PlatformRepositoryTest [RED]
-- [ ] Task: Implement PlatformRepositoryImpl and register in Koin modules [GREEN]
-- [ ] Task: Conductor - User Manual Verification 'Phase 1 - Platforms Storage' (Protocol in workflow.md)
+- [x] Task: Create Platform domain model and PlatformEntity in Room
+- [x] Task: Create PlatformDao and pre-seed list of gaming platforms
+- [x] Task: Update GamesCatalogDatabase (version 2) with Room pre-population callback
+- [x] Task: Write failing unit tests in PlatformDaoTest and PlatformRepositoryTest [RED]
+- [x] Task: Implement PlatformRepositoryImpl and register in Koin modules [GREEN]
+- [x] Task: Conductor - User Manual Verification 'Phase 1 - Platforms Storage' (Protocol in workflow.md)
 
 ## Phase 2: Navigation Setup & Dependencies
 - [ ] Task: Add androidx-navigation-compose to libs.versions.toml and app/build.gradle.kts
