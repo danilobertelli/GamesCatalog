@@ -1,12 +1,12 @@
 # Implementation Plan: Setup Room Local Storage, Domain Models, Repository, and Koin DI
 
 ## Phase 1: Dependency Setup (Room, KSP, Koin)
-- [ ] Task: Configure Gradle plugins and dependencies for KSP, Room, and Koin
-    - [ ] Add KSP plugin to `gradle/libs.versions.toml` and root `build.gradle.kts`
-    - [ ] Add Room runtime, ktx, and compiler (via ksp) to version catalog and `app/build.gradle.kts`
-    - [ ] Add Koin Android and Koin Compose dependencies to version catalog and `app/build.gradle.kts`
-    - [ ] Sync and compile project to ensure dependencies resolve
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Dependency Setup' (Protocol in workflow.md)
+- [x] Task: Configure Gradle plugins and dependencies for KSP, Room, and Koin
+    - [x] Add KSP plugin to `gradle/libs.versions.toml` and root `build.gradle.kts`
+    - [x] Add Room runtime, ktx, and compiler (via ksp) to version catalog and `app/build.gradle.kts`
+    - [x] Add Koin Android and Koin Compose dependencies to version catalog and `app/build.gradle.kts`
+    - [x] Sync and compile project to ensure dependencies resolve
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Dependency Setup' (Protocol in workflow.md)
 
 ## Phase 2: Domain Layer Definition
 - [ ] Task: Create Domain Models and Enums
