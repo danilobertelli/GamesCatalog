@@ -8,6 +8,8 @@
 4. **Coverage Standard:** Target >80% test coverage for domain use cases and repository mappers.
 5. **Modern Android Platform:** Targeting `minSdk = 36` natively without legacy backport overhead.
 6. **English Documentation:** All Conductor artifacts, code comments, commit messages, and symbols must be written in English.
+7. **Comprehensive KDoc Documentation:** All public interfaces, domain models, Room DAOs, repositories, network data sources, and ViewModels must include thorough KDoc comments documenting their behavior, parameters, and return types.
+8. **Structured Logging & Observability:** All data sources, network calls, token authentications, and persistence mutations must be instrumented with structured `Log.d` and `Log.e` using dedicated class tags. Never log raw tokens, secrets, or sensitive PII. Ensure `unitTests.isReturnDefaultValues = true` in build configuration so logging never breaks local JVM unit tests.
 
 ---
 

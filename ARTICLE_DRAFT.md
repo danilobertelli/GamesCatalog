@@ -1,252 +1,437 @@
 # Além do "Vibe Coding": Como o Conductor e o Context-Driven Development Transformam o Desenvolvimento Android com IA
-*(Beyond "Vibe Coding": How Conductor and Context-Driven Development Transform Android Development with AI)*
 
-> **Status:** Draft / Work in Progress  
 > **Autor:** Danilo Bertelli  
-> **Target Audience:** Android Engineers, Tech Leads, AI & Software Engineering Enthusiasts  
-> **Target Formats:** Medium (in-depth technical guide) & LinkedIn (executive summary & key takeaways)  
-> **Repositório do Estudo de Caso:** [github.com/danilobertelli/GamesCatalog](https://github.com/danilobertelli/GamesCatalog)
+> **Público-alvo:** Engenheiros Android, Tech Leads e Desenvolvedores de Software  
+> **Repositório do Projeto:** [github.com/danilobertelli/GamesCatalog](https://github.com/danilobertelli/GamesCatalog)
 
 ---
 
-## 1. Executive Summary / Resumo Executivo
+## 1. O Paradoxo da IA na Engenharia: Velocidade vs. Débito Técnico
 
-O desenvolvimento assistido por IA revolucionou a velocidade de escrita de código, mas trouxe um desafio crítico: o chamado *"Vibe Coding"* — programar sem especificações formais, sem arquitetura consistente, gerando código que "parece funcionar", mas acumula débitos técnicos e alucinações.
+Nos últimos meses, o termo *"vibe coding"* ganhou força nas redes: a ideia sedutora de abrir uma janela de chat, descrever em linguagem natural o que você quer e deixar um modelo de linguagem cuspir centenas de linhas de código em segundos.
 
-Neste artigo prático e técnico, apresento a aplicação do **Conductor**, um framework de orquestração baseado em **Context-Driven Development (CDD)** para o ecossistema Antigravity. Demonstro na prática como desenvolvemos o aplicativo Android **GamesCatalog** (Kotlin 2.2, Android SDK 36, Room, Koin e Jetpack Compose), onde cada linha de código foi guiada por especificações formais, ciclo rigoroso de **TDD (Red ➔ Green)** e pontos de controle (*gates*) com aprovação humana obrigatória antes de cada commit.
+Para protótipos de fim de semana ou scripts pontuais, essa abordagem funciona bem. Mas quem vive o dia a dia da engenharia de software em bases de código reais sabe o que acontece em seguida:
+- Arquitetura inconsistente com classes acumulando responsabilidades demais;
+- Strings literais espalhadas pelas telas;
+- Falta de testes automatizados ou testes superficiais que testam apenas mocks triviais;
+- Regras de negócio acopladas diretamente na camada de interface;
+- Alucinações silenciosas de bibliotecas e métodos obsoletos.
 
----
+O problema não está nos modelos de linguagem em si. Modelos de fronteira conhecem muito sobre sintaxe de linguagens como Kotlin e padrões de bibliotecas modernas como Jetpack Compose. O gargalo real é a **falta de contexto estruturado e governança técnica**. 
 
-## 2. Estrutura do Artigo / Article Outline
+Quando um modelo opera sem limites explícitos, sem uma especificação formal e sem um ciclo de verificação contínua, ele otimiza apenas para agradar no próximo token gerado, e não para a sustentabilidade da aplicação a longo prazo.
 
-### Introdução: O Dilema da IA no Desenvolvimento de Software
-- A armadilha do "código solto" (*Vibe Coding*): por que pedir à IA para "criar um app" gera débitos técnicos imediatos.
-- Por que a IA precisa de contexto persistente (regras de produto, stack tecnológica e diretrizes de workflow).
-- O que é o **Conductor**: o "maestro" que guia a IA através de Context-Driven Development.
+Neste artigo, apresento uma alternativa prática a esse caos: o **Context-Driven Development (CDD)** orquestrado pelo **Conductor**, utilizando o ecossistema **Google Antigravity**. 
 
----
-
-### Parte 1: Como Começar com o Conductor no Antigravity / CLI
-
-Nesta seção, mostro como qualquer engenheiro ou equipe de software pode configurar e usar o Conductor do zero dentro do **Google Antigravity (IDE ou CLI)**.
-
-#### 1. O que é o Conductor e onde ele vive?
-O Conductor é um plugin/skill oficial de workflow para o Antigravity. Em vez de prompts soltos em janelas de chat efêmeras, o Conductor estrutura todo o ciclo de vida do projeto em arquivos Markdown versionados no Git sob o diretório `conductor/`.
-
-#### 2. Os Comandos e o Fluxo Operacional (Slash Commands):
-
-| Comando | Função Principal | Quando Usar |
-| :--- | :--- | :--- |
-| `/setup` | Faz o scaffold inicial do ambiente e define os pilares do projeto. | No início do projeto (Greenfield) ou ao adotar o Conductor em projeto existente (Brownfield). |
-| `/newTrack` | Cria e planeja uma nova unidade atômica de trabalho (Feature, Bugfix, Chore). | Sempre que for iniciar uma nova tarefa ou funcionalidade. |
-| `/implement` | Executa o plano da Track fase por fase com TDD e checagens automáticas. | Durante o desenvolvimento hands-on da funcionalidade. |
-| `/status` | Exibe o progresso geral do projeto, tracks ativas e pendências. | A qualquer momento para acompanhamento e alinhamento de progresso. |
-| `/review` | Audita o código final implementado contra a especificação e styleguides. | Ao terminar uma track antes do merge final. |
-| `/revert` | Desfaz alterações ou reverte passos de uma track com segurança. | Quando uma abordagem técnica precisa ser descartada. |
-
-#### 3. Passo a Passo Prático: Da Inicialização à Execução
-
-##### Passo 1: O Scaffold com `/setup`
-Ao disparar `/setup` no prompt do Antigravity, o agente não sai gerando código às cegas; iniciamos um processo de descoberta estruturada conduzido a quatro mãos entre mim e o agente:
-1. **Auditoria de Projeto:** Detecta se o repositório é novo (*Greenfield*) ou existente (*Brownfield*).
-2. **Definição de Produto (`conductor/product.md`):** Definimos em conjunto o objetivo do app, público-alvo, personas e principais casos de uso.
-3. **Diretrizes e Design (`conductor/product-guidelines.md`):** Filosofia de design, tom de voz, experiência do usuário.
-4. **Stack Tecnológica (`conductor/tech-stack.md`):** Registro formal das escolhas: linguagem (Kotlin 2.2), minSdk (36), UI (Jetpack Compose), Persistência (Room 2.7), Injeção de Dependências (Koin), Concorrência (Coroutines/Flow).
-5. **Workflow e Governança (`conductor/workflow.md`):** Nossas regras de ouro da engenharia: branch strategy, convenção de commits (*Reason, Solution, Test*), TDD obrigatório e proteção de commits (a IA nunca commita sem a minha aprovação prévia).
-
-##### Passo 2: O Planejamento com `/newTrack`
-Em vez de pedir "crie a tela de catálogo", usamos `/newTrack "Setup Room Local Storage, Domain Models, Repository, and Koin DI"`.
-O Conductor automaticamente:
-- Cria o diretório isolado da track: `conductor/tracks/<track_id>/`.
-- Gera o **`spec.md`**: Requisitos funcionais, não-funcionais e critérios de aceitação.
-- Gera o **`plan.md`**: O plano de execução granular quebrado em **Fases sequenciais** com checkboxes interativos (`[ ]`, `[~]`, `[x]`).
-- Gera o **`metadata.json`**: Metadados rastreáveis com timestamp e status da track.
-- Registra a nova track no índice central do projeto (`conductor/tracks.md`).
-
-##### Passo 3: A Execução com `/implement`
-Com o plano revisado e aprovado por mim, a execução começa:
-- **Plan Mode & Tool Execution:** O Antigravity utiliza ferramentas nativas (`write_to_file`, `replace_file_content`, `run_command`) para criar e alterar arquivos com validação a cada etapa.
-- **Fase por Fase com TDD:** O agente executa as tarefas sequencialmente, garantindo o ciclo Red ➔ Green para cada componente antes de prosseguir.
-- **Verification Gates do Conductor:** Ao término de cada fase, o Conductor inclui uma tarefa obrigatória de verificação manual (`Task: Conductor - User Manual Verification 'Phase X'`), exigindo que eu audite e valide cada entrega antes de avançar.
-
-#### 4. Governança em Camadas: O Segredo para não Perder o Controle da IA
-Um dos maiores receios ao utilizar agentes de IA autônomos em bases de código reais é o risco de commits descontrolados ou alterações destrutivas no histórico do Git. 
-
-Aqui entra um padrão fundamental que adotei: a **Governança em Camadas (Layered Governance)**, combinando as regras específicas do projeto com as minhas diretivas globais de ambiente.
-
-| Camada | Onde Reside | Responsabilidade | Exemplo Prático |
-| :--- | :--- | :--- | :--- |
-| **Camada 1: Minhas Diretivas Globais (Personal Guardrails)** | Configuração global do Antigravity (`GEMINI.md` ou `.gemini/antigravity/rules`) | **Guardrails de Segurança e Políticas Inegociáveis** válidas para todos os meus projetos. | **Guardrail de Commit:** Proíbe estritamente a IA de executar `git commit` sem a minha autorização verbal prévia e expressa. Permite apenas testes e `git add`. |
-| **Camada 2: Orquestração do Projeto (Conductor)** | Diretório `conductor/` versionado no repositório (`workflow.md`, `spec.md`, `plan.md`) | **Regras de Negócio, Arquitetura e Fluxo do Projeto.** | **Verification Gates:** Obriga a pausar ao fim de cada fase do plano. Padroniza o formato do commit (*Reason, Solution, Test*). |
-
-> 💡 **Por que essa separação é poderosa?**  
-> O Conductor organiza o **ritmo** do desenvolvimento (o *como* e o *quando* avançar), enquanto os Guardrails Globais garantem a **minha soberania** sobre ações críticas (o *botão vermelho* que a IA nunca pode apertar sozinha). O agente formula o commit completo, lista os testes validados, mas quem dá o veredito final sou sempre eu.
+Para validar essa metodologia na prática, construí do zero o **GamesCatalog**, um aplicativo Android moderno com suporte a catálogo de jogos, cadastro de plataformas, persistência local offline com Room, UI reativa com Jetpack Compose e busca remota via API oficial da IGDB com autenticação OAuth2 da Twitch.
 
 ---
 
-### Parte 2: Hands-On — Implementando a Track 1 (Persistência Room + Koin DI)
-- **Cenário:** Projeto Android moderno (SDK 36, AGP 9.5, Kotlin 2.2).
-- **Fase 1: Setup de Dependências e Desafios Reais:**
-  - Configuração do Version Catalog (`libs.versions.toml`).
-  - Resolução de incompatibilidades reais: KSP2, AGP 9.5 e migração para Room 2.7.0.
-  - Alinhamento da JDK do Gradle Daemon (JVM 21) para evitar incompatibilidade de bytecode ASM no Robolectric.
-- **Fase 2: Camada de Domínio com TDD:**
-  - O que significa o ciclo **Red ➔ Green** na prática com IA:
-    - 🔴 **Red:** Criação do teste unitário (`GameTest.kt`) antes de qualquer classe de domínio existir. Verificação da falha no Gradle.
-    - 🟢 **Green:** Criação do modelo imutável `Game`, do enum `GameStatus` e da interface `GameRepository`. Testes 100% verdes.
-- **Fase 3: Persistência Local (Room):**
-  - Implementação de `GameEntity`, `Converters`, `GameDao` e `GamesCatalogDatabase`.
-  - Testes em memória com Robolectric e Turbine para validação de `Flow` reativo.
-  - Implementação de `GameRepositoryImpl` com mapeamento seguro e despacho em `Dispatchers.IO`.
-- **Fase 4: Injeção de Dependências com Koin:**
-  - Red Phase: teste de resolução de grafo com Koin (`KoinModulesTest.kt`).
-  - Green Phase: criação de `AppModule.kt` e inicialização limpa no `GamesCatalogApplication`.
-- **Fase 5: Verificação Global e Finalização da Track:**
-  - Execução de `./gradlew testDebugUnitTest` com 100% de sucesso.
-  - Atualização do status da track no Conductor e push para o repositório remoto.
+## 2. O que é o Conductor e o Context-Driven Development?
 
----
+O Conductor é uma ferramenta de orquestração de desenvolvimento desenhada para manter a IA estritamente alinhada às decisões de arquitetura e ao processo da equipe. Em vez de prompts soltos em janelas de conversa descartáveis, o Conductor estrutura todo o ciclo de vida do software em arquivos Markdown versionados no próprio Git, sob a pasta `conductor/`.
 
-### Parte 3: Hands-On — Track 2 (UI Reativa com Compose & O "Mundo Real" no Dispositivo)
+```mermaid
+flowchart TD
+    subgraph Setup["1. Inicialização (/setup)"]
+        P["product.md (Escopo e Personas)"]
+        T["tech-stack.md (Decisões Técnicas)"]
+        W["workflow.md (Regras de Engenharia)"]
+    end
 
-Após a camada de dados estar 100% testada e blindada, iniciamos a Track 2 (`ui_games_catalog_screen_20260917`) para construir a interface do usuário. Esta fase revelou o verdadeiro poder do pareamento com IA e por que o feedback humano contínuo é insubstituível.
+    subgraph TrackLifecycle["2. Ciclo de Vida da Track (/newTrack)"]
+        S["spec.md (Requisitos e Aceite)"]
+        PL["plan.md (Fases e TDD)"]
+        M["metadata.json (Estado e Metadados)"]
+    end
 
-#### 1. TDD na Camada de Apresentação (ViewModel & UI State)
-- **O Desafio:** Garantir ordenação alfabética (A-Z) reativa e filtragem instantânea por busca sem tocar na UI.
-- **Red Phase:** Criação de `GamesCatalogViewModelTest` com `MainDispatcherRule` (JUnit TestWatcher com `StandardTestDispatcher`) e assertions com Turbine e mocks do repository.
-- **Green Phase:** Modelagem de `GamesCatalogUiState` e implementação do `GamesCatalogViewModel` combinando `combine(repository.getAllGames(), searchQuery)` com `stateIn(SharingStarted.WhileSubscribed(5_000))`.
+    subgraph Implementation["3. Execução Controlada (/implement)"]
+        Red["Fase Vermelha: Teste Unitário Falha"]
+        Green["Fase Verde: Código Mínimo Passa"]
+        Gate["Verification Gate: Validação Humana"]
+    end
 
-#### 2. Componentes Atômicos & Design System
-- Criação de componentes isolados com Previews de Compose:
-  - `GameListItem`: Card com placeholder de imagem, título em ellipsis e avaliação formatada.
-  - `CatalogSearchBar`: Campo de busca arredondado com ícone de lupa e ação rápida de limpeza.
-  - `CatalogEmptyState`: Tratamento visual distinto para "Biblioteca Vazia" vs "Nenhum resultado encontrado".
-
-#### 3. Os Dois "Choques de Realidade": Onde o Olhar Humano Faz Toda a Diferença
-Aqui ocorreu um dos momentos mais ricos do estudo de caso:
-
-##### Caso 1: O Bug Visual do Edge-to-Edge no Dispositivo Físico
-Com o Android 15 e `enableEdgeToEdge()` ativo no `MainActivity`, a janela do app desenha por padrão sob a barra de status e barra de navegação. 
-- **O Problema:** Ao rodar no aparelho físico plugado via ADB, o título *"My Games"* colidiu diretamente com o relógio (`14:03`) e os ícones de bateria da barra de status do sistema.
-- **A Resolução Conduzida por IA via ADB:**
-  - Ao rodar no meu aparelho conectado, notei o bug visual imediatamente: a top bar estava sobrepondo a status bar.
-  - O agente Antigravity capturou um screenshot direto do hardware via `adb shell screencap`, inspecionou o artefato e identificou a ausência de insets no `Column` do `topBar`.
-  - Aplicou `Modifier.statusBarsPadding()`, recompilou (`./gradlew installDebug`), enviou o intent de inicialização e capturou novo screenshot comprovando o espaçamento perfeito.
-
-##### Caso 2: A Guardrail de Engenharia — "Nada de Hardcoded Strings"
-- Mesmo com a UI visualmente corrigida e testes unitários 100% verdes, notei que os textos ainda estavam literais no código Kotlin.
-- **Ajuste Imediato:** Orientei a extração imediata de todas as strings para `res/values/strings.xml`, com suporte a descrições de acessibilidade (`contentDescription`), formatação dinâmica com parâmetros (`%1$d/5`, `%1$s`) e consumo via `stringResource(R.string...)`.
-- **A Lição:** A IA pode acelerar a escrita a 1000 km/h, mas a aderência estrita às boas práticas da plataforma depende da nossa sensibilidade técnica como engenheiros que conduzem o processo.
-
----
-
----
-
-### Parte 4: Hands-On — Track 3 (Tela de Cadastro de Novo Jogo & O Refinamento de Domínio Pré-UI)
-
-Na Track 3 (`ui_add_game_screen_20260917`), avançamos para a tela de criação de novos jogos, acionada pelo Floating Action Button da tela principal. Aqui aconteceu mais um exemplo fascinante de engenharia colaborativa com IA.
-
-#### 1. A Intervenção de Domínio: "Evitando o Caos de Dados com Plataformas Pré-Cadastradas"
-Antes de desenhar qualquer tela ou formulário, notei um risco clássico de modelagem:
-> Se deixássemos o campo de plataformas como texto livre, cada usuário digitaria de um jeito: *"PS5"*, *"Playstation 5"*, *"ps 5"*, *"play5"*. Isso destruiria a consistência do banco de dados e inviabilizaria filtros futuros.
-
-- **A Decisão do Engenheiro:** Orientei pausar a UI e adicionar uma fase prévia no Conductor dedicada à criação de uma tabela de `Platform` no Room com 28 plataformas pré-cadastradas (PlayStation, Xbox, Nintendo, PC, Retro, etc.).
-- **Execução Estruturada pelo Conductor:**
-  1. **Fase 1 (Domain & Pre-seeding):** Criação da entidade `PlatformEntity`, DAO, migração do banco Room para v2 e injeção do repositório no Koin com TDD.
-  2. **Fase 2 (Navegação Jetpack Compose):** Adição de `androidx-navigation-compose` e orquestração de rotas limpas (`AppNavHost`).
-  3. **Fase 3 (ViewModel & State Machine com TDD):** Testes unitários para validação de título obrigatório, seleção de status, nota (1-5 estrelas) e seleção múltipla de plataformas.
-  4. **Fase 4 (Compose UI & Feedback Real no Hardware):**
-     - Criação de componentes atômicos: `StarRatingPicker`, `StatusChipGroup` e `PlatformChipGroup` (usando `FlowRow` com chips carregados dinamicamente do Room).
-     - 100% dos textos e mensagens de erro extraídos em `strings.xml`.
-     - Suporte a teclado virtual com `imePadding()`, scroll vertical e TopAppBar com navegação de retorno.
-     - Validação instantânea no aparelho físico conectado via ADB e captura de tela do fluxo completo (do FAB ao formulário preenchido e retorno ao catálogo).
-
----
-
-### Parte 5: Hands-On — Track 4 (Visualização, Edição & Exclusão de Jogo com Confirmação)
-
-Na Track 4 (`ui_game_detail_screen_20260917`), fechamos o ciclo de gerenciamento de dados local implementando a tela de visualização e edição detalhada de um jogo cadastrado.
-
-#### 1. Requisitos Clássicos de Negócio & Decisões de Design
-Ao definir a track, alinhamos regras estritas de edição:
-- **Título e Plataformas são Imutáveis (Read-Only):** Exibidos em cards com destaque e chips informativos, garantindo consistência histórica e prevenindo inconsistências acidentais.
-- **Campos Editáveis:** Status de progresso (`Want to Play`, `Playing`, `Completed`, `Abandoned`), avaliação em estrelas (1-5) e anotações/resenha do jogador.
-- **Ação Explícita de Salvar:** Botão fixo no rodapé com elevação tonal e insets de navegação, persistindo via `GameRepository.upsertGame` e retornando com feedback visual.
-- **Ação Crítica de Exclusão:** Ícone de lixeira na TopAppBar acionando um `AlertDialog` de confirmação (*"Tem certeza que deseja excluir? Esta ação não pode ser desfeita"*).
-
-#### 2. TDD & Arquitetura Robusta
-- Red Phase em `GameDetailViewModelTest.kt` cobrindo carregamento por ID via `SavedStateHandle`, tratamento de jogo inexistente (`isGameNotFound`), modificação de campos, persistência e exclusão.
-- Reuso de componentes atômicos construídos nas tracks anteriores (`StatusChipGroup`, `StarRatingPicker`), acelerando a montagem da tela com 100% das strings em `strings.xml`.
-
-#### 3. O Ponto de Equilíbrio: Onde Termina o Trabalho da IA e Começa a Validação Humana
-Durante a revisão do plano de implementação desta track, fiz uma intervenção cirúrgica nos critérios de validação:
-> *"Manual verification pode deixar com o desenvolvedor, garanta apenas a instalação no final do processo."*
-
-Essa instrução resume o equilíbrio perfeito de um fluxo de desenvolvimento moderno com IA:
-- **A Responsabilidade da IA:** Garantir a blindagem do código, a cobertura com testes unitários automatizados (`./gradlew testDebugUnitTest`), a compilação do APK (`assembleDebug`) e a instalação direta no aparelho plugado via `./gradlew installDebug`.
-- **A Responsabilidade do Desenvolvedor:** Pegar o aparelho na mão, navegar pelas telas, validar a ergonomia dos botões, sentir a fluidez da digitação e a resposta dos toques reais.
-- **O Veredito Final:** Somente após a minha validação física direta (*"Já realizei o teste e está ok, podemos prosseguir"*) o agente recebeu sinal verde para executar o commit e o push para o GitHub.
-
----
-
-### 5. Da Documentação à Realidade: Integrando a API da IGDB (Track 5)
-
-Uma das maiores armadilhas no desenvolvimento com IA é presumir contratos de API antes de consultar a documentação oficial. Na Track 5, estabelecemos uma regra clara antes de escrever qualquer linha de código:
-> *"Antes de começar, analise a documentação e APIs disponíveis em https://api-docs.igdb.com e verifique as que podemos usar na aplicação."*
-
-#### 1. Pesquisa Técnica Aprofundada & Decisões Arquiteturais
-- **Investigação da API IGDB:** Mapeamos a sintaxe de consulta Apicalypse (`fields name, summary, cover.image_id; search "..."; limit 8;`), o sistema de URLs das imagens (`https://images.igdb.com/igdb/image/upload/t_{size}/{hash}.jpg`) e a autenticação obrigatória via Twitch OAuth2 (`client_credentials`).
-- **Alinhamento Tecnológico:** Entre Retrofit e Ktor, optamos por **Retrofit 2.11**, tirando proveito da nossa familiaridade com a biblioteca e integrando com o moderno `kotlinx.serialization` oficial da Jetpack/Kotlin.
-- **Segurança de Credenciais:** As chaves de API nunca vão para o Git. Configuramos o `app/build.gradle.kts` para ler `igdb.clientId` e `igdb.clientSecret` diretamente do `local.properties` do desenvolvedor, expondo-as de forma segura via `BuildConfig`.
-
-#### 2. Engenharia em Camadas: Do Token Manager à UI com Coil
-- **`TwitchTokenManager`:** Implementado com controle rigoroso de expiração e margem de segurança de 60 segundos, protegido por `Mutex` para evitar concorrência e requisições duplicadas.
-- **`IgdbAuthInterceptor`:** Interceptor OkHttp transparente que anexa os headers `Client-ID` e `Authorization: Bearer <token>` em todas as chamadas para a IGDB.
-- **`IgdbRemoteDataSource`:** Converte termos de busca em sintaxe Apicalypse pura, higieniza aspas e resolve as imagens de capa no tamanho `cover_big`.
-- **Autocomplete em Tempo Real:** No `AddGameViewModel`, implementamos um fluxo reativo com `debounce(400)` e `distinctUntilChanged()`. Ao digitar o título de um jogo (ex: *"Zelda"*, *"Witcher"*), um card com sugestões da IGDB aparece instantaneamente.
-- **Autopreenchimento Inteligente:** Ao tocar em uma sugestão, o título, a sinopse/notas e a capa são preenchidos automaticamente, e as plataformas do jogo são cruzadas e pré-selecionadas com os chips locais do Room.
-- **Coil `AsyncImage`:** Capas renderizadas tanto no catálogo principal quanto na tela de detalhes, com fallback elegante para as iniciais estilizadas em caso de jogos sem capa ou offline.
-
----
-
-### Parte 6: Principais Lições Aprendidas (Key Takeaways)
-1. **A IA como Pair Programmer Ativo (não gerador passivo):** A discussão em conjunto sobre arquitetura e trade-offs eleva o nível técnico da entrega.
-2. **A Verdade dos Testes:** O TDD protege contra alucinações. Se o teste não falhou antes, a IA não provou que o código fez diferença.
-3. **Hardware Real Importa:** Nenhuma prévia de layout substitui a execução no aparelho físico com insets, temas e densidades de tela reais.
-4. **Governança em Camadas e Guardrails:** A proibição estrita de commits automáticos garante que cada linha enviada ao Git passe pela nossa auditoria consciente antes de entrar no repositório.
-5. **Rastreabilidade Absoluta:** Qualquer desenvolvedor novo no projeto consegue abrir a pasta `conductor/tracks/` e entender exatamente o motivo de cada decisão técnica tomada.
-
----
-
-### Conclusão & Próximos Passos
-- O Conductor transforma o desenvolvimento assistido por IA de um "experimento arriscado" em uma engenharia de software previsível, auditável e escalável.
-- O catálogo agora é uma experiência rica, conectando persistência local offline-first com o vasto ecossistema de metadados e capas da indústria gamer via IGDB.
-
----
-
-## 5. Notas e Trechos de Código para Citar no Artigo
-
-### Exemplo de Estrutura de Commit Conductor
-```git
-feat(ui): assemble GamesCatalogScreen with localized strings and insets
-
-Reason:
-Complete GamesCatalogScreen implementation adhering to Android standards:
-prevent status bar overlap with WindowInsets and extract all UI text to
-strings.xml.
-
-Solution:
-- Extracted all UI texts and content descriptions to strings.xml.
-- Applied stringResource across all catalog components and screens.
-- Added Modifier.statusBarsPadding() to topBar column for edge-to-edge.
-- Added androidx-lifecycle-runtime-compose to dependencies.
-- Connected GamesCatalogScreen into MainActivity.
-- Completed track ui_games_catalog_screen_20260917.
-
-Test:
-- Executed ./gradlew testDebugUnitTest (all passed).
-- Installed and validated on connected physical device via adb.
+    Setup --> TrackLifecycle
+    TrackLifecycle --> Implementation
+    Gate --> Commit["Commit Padronizado (Reason, Solution, Test)"]
 ```
 
-### O Ciclo Red ➔ Green na Prática
-*(Explicar como o agente roda `.\gradlew testDebugUnitTest`, captura o erro de compilação esperado, implementa a classe e roda novamente até o `BUILD SUCCESSFUL`).*
+### O Triângulo de Contexto do Projeto
+Ao iniciar um projeto com o comando `/setup`, o Conductor não gera código de imediato. Ele estabelece três documentos de referência que alimentam o contexto do agente em cada interação futura:
+
+1. **`product.md`**: Define o propósito da aplicação, público-alvo e regras centrais do negócio. A IA passa a entender o *porquê* de cada tela existir.
+2. **`tech-stack.md`**: O inventário de decisões técnicas inegociáveis. No nosso caso: Kotlin 2.0+, Android SDK 35/36, Jetpack Compose com Material 3, Room 2.7, Coroutines/Flow, Retrofit e Coil. A IA é proibida de sugerir soluções fora desse ecossistema.
+3. **`workflow.md`**: As regras de governança da equipe. Define o uso obrigatório de TDD (Red ➔ Green), a convenção de commits com seções de *Reason*, *Solution* e *Test*, e os pontos de parada obrigatórios antes de qualquer modificação em branches principais.
+
+### As Tracks como Unidades Atômicas de Trabalho
+Com o ecossistema configurado, qualquer nova tarefa — seja uma funcionalidade nova, um bugfix ou uma refatoração — nasce como uma **Track** via comando `/newTrack`.
+
+Cada track é isolada em seu próprio diretório (`conductor/tracks/<nome_da_track>/`) e possui:
+- **`spec.md`**: Especificação técnica com requisitos funcionais, requisitos não-funcionais e critérios de aceitação mensuráveis.
+- **`plan.md`**: Plano de implementação granular quebrado em fases sequenciais com caixas de seleção (`[ ]`, `[~]`, `[x]`). Cada fase exige testes unitários prévios e um gate de verificação.
+- **`metadata.json`**: Registro estruturado de estado da track (`new`, `in_progress`, `completed`).
+
+O arquivo `conductor/tracks.md` funciona como o painel central do projeto, consolidando todas as tracks e seus respectivos status.
+
+---
+
+## 3. Governança em Camadas: Mantendo o Engenheiro no Comando
+
+Um dos maiores riscos ao trabalhar com agentes que têm acesso ao terminal é a perda de controle sobre o versionamento. Se deixado livre, o agente pode commitar arquivos quebrados, queimar histórico de commits úteis ou vazar segredos locais para o repositório remoto.
+
+Para eliminar esse risco, estabelecemos o princípio de **Governança em Camadas**:
+
+```mermaid
+flowchart TD
+    subgraph Layer1["Camada 1: Guardrails Pessoais"]
+        direction TB
+        G1["Proibição estrita de git commit sem autorização direta"]
+        G2["Isolamento de credenciais locais (local.properties)"]
+        G3["Padrões de Logs sem PII ou segredos"]
+    end
+
+    subgraph Layer2["Camada 2: Conductor do Projeto"]
+        direction TB
+        C1["Spec e Plan estruturados"]
+        C2["TDD Red-to-Green obrigatório"]
+        C3["Formato de commit: Reason, Solution, Test"]
+    end
+
+    subgraph Layer3["Camada 3: Validação Humana"]
+        direction TB
+        H1["Teste físico em dispositivo real via ADB"]
+        H2["Avaliação de ergonomia e acessibilidade"]
+        H3["Aprovação verbal explícita do commit e push"]
+    end
+
+    Layer1 --> Layer2
+    Layer2 --> Layer3
+```
+
+- **A IA nunca commita sozinha**: O agente pode rodar o Gradle, executar testes unitários, inspecionar logs e até compilar e instalar o APK no dispositivo físico via ADB. Porém, o comando `git commit` só pode ser executado após uma instrução explícita do desenvolvedor humano.
+- **Formato Rígido de Commits**: Todo commit segue o formato:
+  - Primeira linha: `<tipo/escopo>: <resumo imperativo curto>`.
+  - Corpo dividido nas seções `Reason`, `Solution` e `Test`, com quebra de linha em 72 caracteres.
+- **Isolamento de Segredos**: Arquivos como `local.properties` (que guardam chaves de API da Twitch e IGDB) são checados continuamente para garantir que nunca sejam adicionados à área de staging do Git.
+
+---
+
+## 4. O Estudo de Caso: Construindo o GamesCatalog Passo a Passo
+
+Para demonstrar como essa dinâmica funciona no dia a dia, vamos analisar as seis tracks que construíram a aplicação, destacando os desafios técnicos reais e as intervenções humanas necessárias em cada uma.
+
+---
+
+### Track 1: Fundação Local, Room e Desafios de Build
+
+A primeira track (`core_storage_koin_20260917`) teve como missão criar o banco de dados local Room, os modelos de domínio e os contratos de repositório.
+
+#### O Ciclo Red ➔ Green na Prática
+Antes de criar qualquer classe de domínio, o agente gerou o arquivo de teste unitário `GameTest.kt`:
+
+```kotlin
+class GameTest {
+    @Test
+    fun `instantiating game with valid parameters succeeds`() {
+        val game = Game(
+            id = "game-1",
+            title = "Chrono Trigger",
+            overview = "A classic RPG involving time travel.",
+            coverImageUrl = "https://example.com/cover.jpg",
+            platforms = listOf("SNES", "PlayStation"),
+            status = GameStatus.COMPLETED,
+            rating = 5
+        )
+
+        assertEquals("Chrono Trigger", game.title)
+        assertEquals(GameStatus.COMPLETED, game.status)
+        assertEquals(5, game.rating)
+    }
+}
+```
+
+O agente executou `./gradlew testDebugUnitTest` no terminal. O build falhou imediatamente porque a classe `Game` e o enum `GameStatus` ainda não existiam — a **fase vermelha** do TDD confirmada. 
+
+Em seguida, o agente implementou os modelos no pacote de domínio e executou o Gradle novamente até obter a **fase verde**. O mesmo processo foi repetido para o `GameDao` e o `GameRepositoryImpl`, utilizando banco em memória com Robolectric e a biblioteca Turbine para testar as emissões de `Flow<List<Game>>`.
+
+#### O Desafio Real da JVM e o Version Catalog
+Durante a configuração, nos deparamos com um conflito técnico comum em versões recentes de ferramentas: o alinhamento da JVM entre o daemon do Gradle e o compilador Kotlin 2.2 com AGP 8.9+. 
+
+Em vez de esconder o erro ou tentar contornos frágeis, o Conductor registrou a incompatibilidade na fase correspondente do plano e alinhamos a JVM para o OpenJDK 21 via `gradle.properties`, mantendo o `libs.versions.toml` limpo e declarativo.
+
+---
+
+### Track 2: UI Reativa em Compose e o Choque de Realidade no Hardware Físico
+
+Com a camada de dados testada e estável, a segunda track (`ui_games_catalog_screen_20260917`) teve como foco a tela principal de catálogo.
+
+#### ViewModel Reativo com StateFlow
+Na camada de apresentação, aplicamos Unidirectional Data Flow (UDF). A ViewModel combina o fluxo contínuo do banco de dados com a string de busca digitada pelo usuário:
+
+```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
+class GamesCatalogViewModel(
+    private val repository: GameRepository
+) : ViewModel() {
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    val uiState: StateFlow<GamesCatalogUiState> = _searchQuery
+        .combine(repository.getAllGames()) { query, games ->
+            val filtered = if (query.isBlank()) {
+                games
+            } else {
+                games.filter { it.title.contains(query, ignoreCase = true) }
+            }
+            GamesCatalogUiState(
+                games = filtered.sortedBy { it.title },
+                isLoading = false,
+                searchQuery = query
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = GamesCatalogUiState(isLoading = true)
+        )
+}
+```
+
+#### O Bug Visual do Edge-to-Edge no Dispositivo Real
+Aqui aconteceu um dos momentos mais instrutivos do projeto:
+1. Com o `enableEdgeToEdge()` ativo na `MainActivity`, a barra superior do aplicativo desenhou diretamente por baixo da barra de status do sistema.
+2. Ao rodar o app no meu aparelho físico conectado via USB, notei que o título *"My Games"* colidia com o relógio e os ícones de bateria.
+3. Solicitei a investigação. O agente utilizou o comando `adb shell screencap` para capturar a tela do hardware, analisou a imagem gerada e constatou visualmente a colisão de insets.
+4. A correção foi cirúrgica: adicionar `Modifier.statusBarsPadding()` na coluna superior da tela. Um novo screenshot foi capturado via ADB confirmando o alinhamento correto.
+
+#### A Diretriz Inegociável: Sem Strings Literais
+Mesmo com o layout ajustado e testes unitários passando, identifiquei que textos como títulos e botões haviam sido escritos como strings literais dentro dos arquivos composable. 
+
+Parei a execução e exigi a extração imediata de 100% das strings para `res/values/strings.xml`, incluindo textos de acessibilidade (`contentDescription`) e suporte a parâmetros de formatação (`%1$d/5`, `%1$s`). A velocidade da IA só agrega valor quando preserva os fundamentos da plataforma.
+
+---
+
+### Track 3: Refinamento de Domínio Pré-UI (Prevenindo o Caos de Dados)
+
+Na terceira track (`ui_add_game_screen_20260917`), avançamos para a tela de cadastro de novos jogos. 
+
+Antes de construir o formulário, analisei a especificação inicial e identifiquei um problema clássico de arquitetura:
+> Se o campo de plataformas fosse um campo de texto livre, os usuários cadastrariam a mesma plataforma de formas diferentes: *"PS5"*, *"Playstation 5"*, *"ps 5"*, *"play5"*. Isso corromperia a integridade dos dados e impediria filtros consistentes no futuro.
+
+Interrompi o plano antes que qualquer linha de UI fosse escrita e orientei a criação de uma fase prévia de domínio:
+1. Criar a entidade `PlatformEntity` e a tabela `platforms` no Room;
+2. Atualizar a versão do banco de dados Room com migração segura;
+3. Criar uma lista com 28 plataformas pré-cadastradas (`PreseededPlatforms`), contemplando ecossistemas modernos e retrô;
+4. Criar o `PlatformRepository` com rotina de inicialização automática no primeiro boot.
+
+Com a base de dados consistente, a tela de cadastro pôde ser construída com seleção múltipla de chips dinâmicos (`FilterChip` dentro de um `FlowRow`), garantindo que o usuário selecione plataformas padronizadas.
+
+---
+
+### Track 4: Gestão do Dado e o "Human in the Loop"
+
+A quarta track (`ui_game_detail_screen_20260917`) fechou o CRUD local com a tela de detalhes, edição e exclusão.
+
+Aqui estabelecemos uma regra clara de design de produto:
+- **Campos imutáveis**: Título e plataformas não podem ser alterados após o cadastro (evitando que o usuário renomeie um jogo e deixe o histórico sem sentido).
+- **Campos editáveis**: Status de progresso (`Want to Play`, `Playing`, `Completed`, `Abandoned`), nota por estrelas (1 a 5) e resenha pessoal.
+- **Ação destrutiva protegida**: A exclusão só acontece mediante confirmação explícita em um `AlertDialog`.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Engenheiro (Humano)
+    participant Cond as Conductor (Plan Mode)
+    participant Agent as Antigravity Agent
+    participant Gradle as Gradle & Testes
+    participant Device as Dispositivo Físico (ADB)
+
+    Cond->>Agent: Executa tarefa da fase atual
+    Agent->>Agent: Escreve código de produção e testes
+    Agent->>Gradle: ./gradlew testDebugUnitTest
+    Gradle-->>Agent: Testes verdes (BUILD SUCCESSFUL)
+    Agent->>Gradle: ./gradlew installDebug
+    Gradle-->>Device: APK atualizado instalado
+    Agent->>Dev: Pausa no Verification Gate
+    Dev->>Device: Navega pelas telas, testa toques e insets
+    Dev->>Agent: "Validação manual OK. Pode commitar e dar push."
+    Agent->>Agent: Executa git commit com Reason, Solution, Test
+    Agent->>Agent: git push origin main
+```
+
+Nesta track, deixei registrado um dos princípios mais importantes do pareamento com agentes autônomos:
+> *"Manual verification pode deixar com o desenvolvedor, garanta apenas a instalação no final do processo."*
+
+A divisão de trabalho é simples: a IA garante a cobertura automatizada, a integridade de compilação e a entrega do binário no dispositivo de teste. O desenvolvedor humano valida a experiência de uso real: ergonomia, resposta tátil ao toque, legibilidade e comportamento do teclado virtual. Somente após essa validação física o sinal verde para o commit é concedido.
+
+---
+
+### Track 5: Consumo Consciente de APIs Externas (Twitch OAuth2 + IGDB)
+
+Na quinta track (`api_igdb_integration_20260917`), transformamos o aplicativo em uma experiência conectada à base de dados mundial da indústria gamer através da API da IGDB.
+
+#### Pesquisa de Documentação Antes do Código
+Uma das maiores fontes de alucinação de IA ocorre quando ela inventa endpoints ou schemas de bibliotecas que mudaram de versão. Para evitar isso, começamos com uma ordem explícita: analisar a documentação técnica oficial da IGDB (`api-docs.igdb.com`).
+
+A análise revelou particularidades cruciais que impactaram diretamente a arquitetura:
+1. A IGDB utiliza uma sintaxe própria de consulta no corpo das requisições chamada **Apicalypse** (`fields name, summary, cover.image_id; search "..."; limit 8;`), enviada como `text/plain`.
+2. As URLs de capas não vêm prontas: a API devolve um `image_id` alfanumérico que deve ser montado contra o CDN da IGDB (`https://images.igdb.com/igdb/image/upload/t_cover_big/{image_id}.jpg`).
+3. O acesso exige autenticação prévia contra a API da Twitch via fluxo de `client_credentials` do OAuth2.
+
+#### Autenticação Thread-Safe com Mutex
+Para gerenciar o ciclo de vida do token de acesso da Twitch, criamos o `TwitchTokenManager`. O componente armazena o token em memória com margem de segurança de 60 segundos antes da expiração e utiliza um `Mutex` para evitar chamadas de rede concorrentes:
+
+```kotlin
+class TwitchTokenManagerImpl(
+    private val authService: TwitchAuthService,
+    private val clientId: String,
+    private val clientSecret: String
+) : TwitchTokenManager {
+
+    private val mutex = Mutex()
+    private var cachedToken: String? = null
+    private var tokenExpiryEpochSeconds: Long = 0L
+
+    override suspend fun getAccessToken(): Result<String> = mutex.withLock {
+        val currentEpoch = Instant.now().epochSecond
+        val token = cachedToken
+
+        if (token != null && currentEpoch < (tokenExpiryEpochSeconds - EXPIRATION_BUFFER_SECONDS)) {
+            Log.d(TAG, "Reusing valid cached Twitch OAuth token")
+            return Result.success(token)
+        }
+
+        runCatching {
+            val response = authService.getAccessToken(
+                clientId = clientId,
+                clientSecret = clientSecret
+            )
+            cachedToken = response.accessToken
+            tokenExpiryEpochSeconds = currentEpoch + response.expiresIn
+            Log.d(TAG, "Acquired new Twitch OAuth token (expires in ${response.expiresIn}s)")
+            response.accessToken
+        }.onFailure { error ->
+            Log.e(TAG, "Failed to authenticate with Twitch OAuth2", error)
+        }
+    }
+
+    companion object {
+        private const val TAG = "TwitchTokenManager"
+        private const val EXPIRATION_BUFFER_SECONDS = 60L
+    }
+}
+```
+
+#### Autocomplete Reativo na UI com Debounce
+Na tela de cadastro, o título digitado alimenta um fluxo reativo que só dispara a busca na API após o usuário pausar a digitação por 400 milissegundos e ter digitado ao menos 3 caracteres:
+
+```kotlin
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+val remoteSearchResults: StateFlow<List<GameSearchResult>> = _title
+    .debounce(400)
+    .distinctUntilChanged()
+    .mapLatest { query ->
+        val trimmed = query.trim()
+        if (trimmed.length < 3) {
+            emptyList()
+        } else {
+            igdbRepository.searchGames(trimmed).getOrDefault(emptyList())
+        }
+    }
+    .stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList()
+    )
+```
+
+Ao tocar em um resultado da lista, o formulário se preenche sozinho: título, sinopse, capa em alta resolução via Coil e seleção automática dos chips de plataformas correspondentes já cadastrados no Room.
+
+---
+
+### Track 6: Sustentabilidade, Logs e o Bug Oculto de Toolchains
+
+Muitos projetos assistidos por IA encerram quando a última tela fica pronta. No nosso fluxo, adicionamos uma track final de sustentação e documentação (`support_docs_logs_readme_20260917`).
+
+#### KDoc em 100% dos Contratos
+Todas as interfaces de repositório, DAOs, serviços de rede e ViewModels receberam documentação estruturada KDoc, detalhando parâmetros, comportamentos assíncronos e contratos de retorno.
+
+#### Logs Estruturados sem Vazamento de Dados
+Adicionamos `Log.d` e `Log.e` em pontos críticos (ciclo de tokens, chamadas à IGDB e operações de banco de dados). Para garantir a privacidade, **nenhum segredo ou token bruto é registrado em log** — apenas eventos de ciclo de vida e tempo de expiração.
+
+Para que esses logs funcionassem sem quebrar a execução de testes unitários locais na JVM, adicionamos a seguinte configuração no `app/build.gradle.kts`:
+
+```kotlin
+android {
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+}
+```
+
+#### A Batalha Real com as Gradle Toolchains no Windows
+Durante a verificação final da Track 6, nos deparamos com um erro de build inesperado:
+
+```text
+Execution failed for JdkImageTransform: core-for-system-modules.jar.
+> jlink executable C:\Users\...\.vscode\extensions\redhat.java-...\jre\...\bin\jlink.exe does not exist.
+```
+
+O mecanismo de auto-detecção de JVM Toolchains do Gradle vasculhou o disco da máquina e descobriu o JRE embutido da extensão Java do VS Code. Como esse ambiente era apenas um JRE e não um JDK completo, ele não continha o executável `jlink.exe`, quebrando a transformação de módulos do Android Gradle Plugin.
+
+A solução técnica foi desativar a auto-detecção e fixar o caminho absoluto do JDK completo no `gradle.properties`:
+
+```properties
+org.gradle.java.installations.auto-detect=false
+org.gradle.java.installations.paths=C:/Users/vntdabe.VENTURUS/.jdks/jbr-21.0.9
+```
+
+Esse é o tipo de problema que nenhuma IA prevê sozinha se deixada sem supervisão. É a experiência do engenheiro que identifica a causa raiz e guia a ferramenta até a correção definitiva.
+
+#### A Track 6 Poderia Ter Sido Evitada? O Poder da Evolução do Contexto
+
+Uma reflexão honesta sobre o processo: **a Track 6 precisava ter existido como uma etapa separada?**
+
+A resposta direta é: **não**. Se durante a fase inicial de setup (`/setup`) tivéssemos registrado explicitamente no `conductor/workflow.md` e no `conductor/tech-stack.md` que:
+1. Toda classe, interface ou método público deve nascer acompanhado de documentação KDoc;
+2. Toda operação de rede, autenticação e persistência deve conter logs estruturados (`Log.d`/`Log.e`) com tags dedicadas e sem expor credenciais sensíveis;
+
+O agente teria gerado cada uma das cinco tracks anteriores com documentação e logs incorporados desde o primeiro minuto. O plano de cada track teria tarefas automáticas de KDoc e logging dentro do próprio ciclo de TDD, tornando desnecessária uma track retroativa de suporte.
+
+No entanto, essa percepção revela uma das características mais práticas do Conductor: **os arquivos de contexto não são monolitos imutáveis**.
+
+O desenvolvimento de software é um processo de aprendizado contínuo. Conforme identificamos lacunas ou novos padrões de qualidade para o time, podemos atualizar diretamente os arquivos raiz:
+- Atualizamos o `conductor/workflow.md` para incluir as diretrizes de KDoc e Logs estruturados obrigatórios em cada tarefa;
+- Atualizamos o `conductor/tech-stack.md` para registrar a convenção de observabilidade e a configuração de mocks de log na JVM.
+
+A partir do momento em que esses arquivos são atualizados, **todas as próximas tracks criadas pelo comando `/newTrack` passam a herdar essas regras automaticamente como verdades inegociáveis**. O contexto do projeto amadurece junto com o time, evitando que débitos técnicos semelhantes voltem a acontecer.
+
+---
+
+## 5. Os Cinco Mandamentos da Engenharia com IA
+
+Após desenvolver uma aplicação completa orientada por especificações e tracks do Conductor, consolidei cinco aprendizados essenciais:
+
+1. **A IA precisa de limites explícitos, não de liberdade irrestrita**:  
+   Sem regras formais de stack e workflow, a IA adota atalhos que parecem funcionais no primeiro commit, mas geram débito técnico insolúvel no décimo.
+2. **O teste unitário que falha primeiro é o seu escudo contra alucinações**:  
+   Se um teste não falhou antes da implementação existir, você não tem garantia de que o código gerado pela IA realmente resolveu o problema.
+3. **O emulador engana; o hardware físico não perdoa**:  
+   Problemas de sobreposição de barra de status (edge-to-edge), comportamento do teclado virtual e resposta tátil só existem de verdade na palma da sua mão.
+4. **Governança em camadas é obrigatória**:  
+   A IA pode analisar, propor e testar; a decisão final de commitar e publicar código deve ser exclusivamente humana.
+5. **O contexto deve evoluir com o projeto**:  
+   Os arquivos do Conductor (`workflow.md`, `tech-stack.md`) são documentos vivos. Sempre que você identificar que a IA deixou de lado uma boa prática que a equipe valoriza — como KDoc ou instrumentação de logs —, não faça apenas uma correção isolada no código; atualize o arquivo de regras do Conductor para que as próximas tracks assumam essa exigência como padrão definitivo.
+
+---
+
+## Conclusão
+
+O desenvolvimento assistido por inteligência artificial não veio para transformar engenheiros de software em meros espectadores. Pelo contrário: à medida que a velocidade de geração de código aumenta, a responsabilidade do engenheiro de atuar como **arquiteto, revisor rigoroso e diretor técnico** torna-se ainda mais indispensável.
+
+O Conductor e o Context-Driven Development mostram que é possível aproveitar a alta produtividade dos agentes autônomos sem abrir mão de rigor arquitetural, TDD e boas práticas de engenharia.
+
+O código-fonte completo do **GamesCatalog**, incluindo todas as tracks, especificações e planos de implementação do Conductor, está disponível publicamente no GitHub:
+
+👉 **[github.com/danilobertelli/GamesCatalog](https://github.com/danilobertelli/GamesCatalog)**

@@ -16,6 +16,9 @@ Adopts **Clean Architecture** with **Unidirectional Data Flow (UDF)**:
 - **Data Layer:** Repository pattern with single-source-of-truth strategy:
   - **Local Data Source:** Room Database with Coroutines and Flow observables.
   - **Remote Data Source:** IGDB API client using Retrofit / OkHttp or Ktor with Kotlinx Serialization.
+- **Observability & Code Quality:**
+  - Structured Android Logging (`Log.d`, `Log.e`) across network, auth, and persistence boundaries without logging PII/credentials.
+  - Full KDoc coverage across public contracts, domain models, and DAOs.
 
 ## 3. Libraries & Dependencies
 - **UI & Toolkit:**
