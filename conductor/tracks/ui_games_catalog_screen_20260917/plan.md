@@ -12,11 +12,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: ViewModel & UI State' (Protocol in workflow.md)
 
 ## Phase 2: UI Components & Design System
-- [ ] Task: Create Atomic Composables
-    - [ ] Implement `GameListItem` with cover placeholder Box, title, and rating ("x/5")
-    - [ ] Implement `CatalogSearchBar` with Material 3 styling, search icon, and clear action
-    - [ ] Implement `CatalogEmptyState` supporting both empty library and empty search results
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Components & Design System' (Protocol in workflow.md)
+- [x] Task: Create Atomic Composables
+    - [x] Implement `GameListItem` with cover placeholder Box, title, and rating ("x/5")
+    - [x] Implement `CatalogSearchBar` with Material 3 styling, search icon, and clear action
+    - [x] Implement `CatalogEmptyState` supporting both empty library and empty search results
+- [x] Task: Conductor - User Manual Verification 'Phase 2: UI Components & Design System' (Protocol in workflow.md)
 
 ## Phase 3: Screen Assembly & Scaffold Integration
 - [ ] Task: Assemble GamesCatalogScreen
