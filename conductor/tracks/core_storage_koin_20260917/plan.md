@@ -30,16 +30,16 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Room Persistence Layer' (Protocol in workflow.md)
 
 ## Phase 4: Koin Dependency Injection & Application Wiring
-- [ ] Task: Configure Koin Modules and Application Class
-    - [ ] Write unit test to verify Koin module configuration (`verify()` or checkModules)
-    - [ ] Create `databaseModule` providing database and DAO
-    - [ ] Create `repositoryModule` providing `GameRepository`
-    - [ ] Implement `GamesCatalogApplication` inheriting `Application` and configuring `startKoin`
-    - [ ] Register `GamesCatalogApplication` in `AndroidManifest.xml`
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Koin Dependency Injection' (Protocol in workflow.md)
+- [x] Task: Configure Koin Modules and Application Class
+    - [x] Write unit test to verify Koin module configuration (`verify()` or checkModules)
+    - [x] Create `databaseModule` providing database and DAO
+    - [x] Create `repositoryModule` providing `GameRepository`
+    - [x] Implement `GamesCatalogApplication` inheriting `Application` and configuring `startKoin`
+    - [x] Register `GamesCatalogApplication` in `AndroidManifest.xml`
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Koin Dependency Injection' (Protocol in workflow.md)
 
 ## Phase 5: Verification & Checkpoint
-- [ ] Task: Automated Project Verification
-    - [ ] Run `./gradlew testDebugUnitTest` and ensure 100% pass rate
-    - [ ] Confirm adherence to Kotlin & Android style guides
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Verification & Checkpoint' (Protocol in workflow.md)
+- [x] Task: Automated Project Verification
+    - [x] Run `./gradlew testDebugUnitTest` and ensure 100% pass rate
+    - [x] Confirm adherence to Kotlin & Android style guides
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Verification & Checkpoint' (Protocol in workflow.md)
