@@ -19,4 +19,35 @@
 
     <!-- Messages -->
     <string name="catalog_add_game_coming_soon">Add Game feature coming soon!</string>
+
+    <!-- Add Game Screen -->
+    <string name="add_game_screen_title">Add Game</string>
+    <string name="add_game_back_description">Back to catalog</string>
+    <string name="add_game_save_button">Save Game</string>
+    <string name="add_game_saved_success">Game added successfully!</string>
+
+    <!-- Form Fields -->
+    <string name="add_game_field_title_label">Game Title *</string>
+    <string name="add_game_field_title_placeholder">Enter game title</string>
+    <string name="add_game_field_title_error">Title cannot be blank</string>
+
+    <!-- Status Group -->
+    <string name="add_game_section_status">Status</string>
+    <string name="add_game_status_want_to_play">Want to Play</string>
+    <string name="add_game_status_playing">Playing</string>
+    <string name="add_game_status_completed">Completed</string>
+    <string name="add_game_status_abandoned">Abandoned</string>
+
+    <!-- Rating Group -->
+    <string name="add_game_section_rating">Rating</string>
+    <string name="add_game_rating_star_description">Rate %1$d out of 5</string>
+    <string name="add_game_rating_clear">Clear rating</string>
+
+    <!-- Platforms Group -->
+    <string name="add_game_section_platforms">Platforms</string>
+    <string name="add_game_platforms_loading">Loading platforms…</string>
+
+    <!-- Overview Group -->
+    <string name="add_game_section_overview">Notes &amp; Overview</string>
+    <string name="add_game_field_overview_placeholder">Add your notes, impressions, or summary (optional)</string>
 </resources>

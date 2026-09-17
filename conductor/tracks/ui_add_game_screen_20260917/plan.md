@@ -21,9 +21,9 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3 - ViewModel & State' (Protocol in workflow.md)
 
 ## Phase 4: Form UI Components & AddGameScreen (Compose)
-- [ ] Task: Extract all form strings, platform labels, and errors to res/values/strings.xml
-- [ ] Task: Implement form components (StarRatingPicker, StatusChipGroup, PlatformChipGroup) with Previews
-- [ ] Task: Assemble AddGameScreen with Scaffold, TopAppBar, scrollable form, and imePadding
-- [ ] Task: Connect Save action to navigateBack + Toast feedback
-- [ ] Task: Connect GamesCatalogScreen FAB to navigate to AddGameScreen
-- [ ] Task: Conductor - User Manual Verification 'Phase 4 - UI & Integration' (Protocol in workflow.md)
+- [x] Task: Extract all form strings, platform labels, and errors to res/values/strings.xml
+- [x] Task: Implement form components (StarRatingPicker, StatusChipGroup, PlatformChipGroup) with Previews
+- [x] Task: Assemble AddGameScreen with Scaffold, TopAppBar, scrollable form, and imePadding
+- [x] Task: Connect Save action to navigateBack + Toast feedback
+- [x] Task: Connect GamesCatalogScreen FAB to navigate to AddGameScreen
+- [x] Task: Conductor - User Manual Verification 'Phase 4 - UI & Integration' (Protocol in workflow.md)

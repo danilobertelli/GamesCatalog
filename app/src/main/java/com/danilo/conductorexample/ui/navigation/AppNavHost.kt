@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.danilo.conductorexample.ui.addgame.AddGameScreen
 import com.danilo.conductorexample.ui.catalog.GamesCatalogScreen
 
 @Composable
@@ -26,7 +27,11 @@ fun AppNavHost(
             )
         }
         composable(AppDestination.AddGame.route) {
-            // Will host AddGameScreen in Phase 4
+            AddGameScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
