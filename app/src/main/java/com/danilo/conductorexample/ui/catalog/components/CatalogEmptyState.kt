@@ -60,7 +60,11 @@ fun CatalogEmptyState(
 
         Text(
             text = if (isSearchEmpty) {
-                stringResource(R.string.catalog_search_empty_subtitle, searchQuery)
+                if (searchQuery.isBlank()) {
+                    stringResource(R.string.catalog_filter_empty_subtitle)
+                } else {
+                    stringResource(R.string.catalog_search_empty_subtitle, searchQuery)
+                }
             } else {
                 stringResource(R.string.catalog_empty_subtitle)
             },

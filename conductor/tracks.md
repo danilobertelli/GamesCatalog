@@ -28,3 +28,8 @@ This file tracks all major development tracks for the project. Each track has it
 - [x] **Track: Documentation, Structured Logging, and Root README.md**
   *Link: [./tracks/support_docs_logs_readme_20260917/](./tracks/support_docs_logs_readme_20260917/)*
 
+---
+
+- [x] **Track: Feature: Filtro por status na tela de catálogo (Todos, Quero Jogar, Jogando, Concluído, Abandonado)**
+  *Link: [./tracks/ui_catalog_status_filter_20260922/](./tracks/ui_catalog_status_filter_20260922/)*
+

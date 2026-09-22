@@ -11,6 +11,14 @@
     <string name="catalog_rating_format">%1$d/5</string>
     <string name="catalog_rating_unrated">-/5</string>
 
+    <!-- Status Filter Chips -->
+    <string name="catalog_filter_all">Todos</string>
+    <string name="catalog_filter_want_to_play">Quero Jogar</string>
+    <string name="catalog_filter_playing">Jogando</string>
+    <string name="catalog_filter_completed">Concluído</string>
+    <string name="catalog_filter_abandoned">Abandonado</string>
+    <string name="catalog_filter_empty_subtitle">No games found matching the selected filter. Try choosing another status or clearing search.</string>
+
     <!-- Empty States -->
     <string name="catalog_empty_title">Your catalog is empty</string>
     <string name="catalog_empty_subtitle">Tap the \'+\' button to start building your personal game library!</string>

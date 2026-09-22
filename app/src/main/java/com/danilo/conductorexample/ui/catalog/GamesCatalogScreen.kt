@@ -4,8 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +35,7 @@ import com.danilo.conductorexample.domain.model.GameStatus
 import com.danilo.conductorexample.ui.catalog.components.CatalogEmptyState
 import com.danilo.conductorexample.ui.catalog.components.CatalogSearchBar
 import com.danilo.conductorexample.ui.catalog.components.GameListItem
+import com.danilo.conductorexample.ui.catalog.components.StatusFilterChips
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -47,6 +50,7 @@ fun GamesCatalogScreen(
     GamesCatalogContent(
         uiState = uiState,
         onSearchQueryChange = viewModel::onSearchQueryChanged,
+        onStatusFilterSelect = viewModel::onStatusFilterSelected,
         onAddGameClick = onAddGameClick,
         onGameClick = { game -> onGameClick(game.id) },
         modifier = modifier
@@ -57,6 +61,7 @@ fun GamesCatalogScreen(
 fun GamesCatalogContent(
     uiState: GamesCatalogUiState,
     onSearchQueryChange: (String) -> Unit,
+    onStatusFilterSelect: (GameStatus?) -> Unit,
     onAddGameClick: () -> Unit,
     modifier: Modifier = Modifier,
     onGameClick: (Game) -> Unit = {}
@@ -68,18 +73,28 @@ fun GamesCatalogContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .padding(top = 12.dp, bottom = 8.dp)
             ) {
                 Text(
                     text = stringResource(R.string.catalog_screen_title),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 12.dp)
                 )
 
                 CatalogSearchBar(
                     query = uiState.searchQuery,
-                    onQueryChange = onSearchQueryChange
+                    onQueryChange = onSearchQueryChange,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                StatusFilterChips(
+                    selectedStatus = uiState.selectedStatus,
+                    onStatusSelected = onStatusFilterSelect
                 )
             }
         },
@@ -159,6 +174,25 @@ private fun GamesCatalogContentPopulatedPreview() {
             searchQuery = ""
         ),
         onSearchQueryChange = {},
+        onStatusFilterSelect = {},
+        onAddGameClick = {}
+    )
+}
+
+@Preview(showBackground = true, name = "Filtered by Status")
+@Composable
+private fun GamesCatalogContentFilteredPreview() {
+    GamesCatalogContent(
+        uiState = GamesCatalogUiState(
+            isLoading = false,
+            games = listOf(
+                Game(id = "2", title = "Metroid Prime Remastered", rating = 4, status = GameStatus.PLAYING)
+            ),
+            searchQuery = "",
+            selectedStatus = GameStatus.PLAYING
+        ),
+        onSearchQueryChange = {},
+        onStatusFilterSelect = {},
         onAddGameClick = {}
     )
 }
@@ -173,6 +207,7 @@ private fun GamesCatalogContentEmptyPreview() {
             isCatalogEmpty = true
         ),
         onSearchQueryChange = {},
+        onStatusFilterSelect = {},
         onAddGameClick = {}
     )
 }
@@ -188,6 +223,7 @@ private fun GamesCatalogContentSearchEmptyPreview() {
             isSearchEmpty = true
         ),
         onSearchQueryChange = {},
+        onStatusFilterSelect = {},
         onAddGameClick = {}
     )
 }
